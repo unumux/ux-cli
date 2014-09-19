@@ -25,6 +25,7 @@ var UxgenGenerator = yeoman.generators.Base.extend({
       this.src.copy('css/app.scss', 'css/app.scss');
       this.src.copy('js/app.coffee', 'js/app.coffee');
       this.src.copy('partials/partial.html', 'partials/partial.html');
+      this.src.copy('.bowerrc', '.bowerrc');
     }
   },
 
