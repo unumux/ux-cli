@@ -11,7 +11,7 @@ Run this and get a fully functioning site with SASS, Coffeescript, Autoprefixer,
 ## Installation
 
 ```
-npm install unumux/generator-unumux
+npm install unumux/generator-unumux -g
 ```
 
 ## Usage
