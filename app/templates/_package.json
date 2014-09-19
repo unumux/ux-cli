@@ -1,0 +1,8 @@
+{
+  "name": "package",
+  "version": "0.0.0",
+  "devDependencies": {
+  	"gulp-framework": "git+https://git@github.com/chuckhendo/gulp-framework.git#npm-conversion",
+    "gulp": "^3.8.8"
+  }
+}
