@@ -20,12 +20,10 @@ var UxgenGenerator = yeoman.generators.Base.extend({
 
       this.src.copy('_package.json', 'package.json');
       this.src.copy('_bower.json', 'bower.json');
-      this.src.copy('_Gulpfile.js', 'Gulpfile.js');
+      this.src.copy('_Gruntfile.js', 'Gruntfile.js');
       this.src.copy('index.html', 'index.html');
-      this.src.copy('css/app.scss', 'css/app.scss');
-      this.src.copy('js/app.coffee', 'js/app.coffee');
-      this.src.copy('partials/partial.html', 'partials/partial.html');
-      this.src.copy('.bowerrc', '.bowerrc');
+      this.src.copy('css/site.scss', 'css/site.scss');
+      this.src.copy('js/site.js', 'js/site.js');
     }
   },
 

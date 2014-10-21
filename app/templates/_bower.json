@@ -1,7 +1,9 @@
 {
   "name": "package",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "colonial-branding": "unumux/colonial-branding"
+  },
   "overrides": {}
 }
 
