@@ -35,19 +35,11 @@ You can then access your development site at http://localhost:3000
 
 ### SASS
 
-Creating a new scss file inside of the css folder will automatically include it inside of the app.scss file. These files need to be prefixed with an "_" to be included. You can also prefix a file with a double underscore "__" to put them at the top of the app.scss file, before the bower files are included. This is useful for things such as variables and mixins.
+Creating a new scss file inside of the css folder will automatically include it inside of the site.scss file. These files need to be prefixed with an "_" to be included. You can also prefix a file with a double underscore "__" to put them at the top of the app.scss file, before the bower files are included. This is useful for things such as variables and mixins.
 
 ### Autoprefixer
 
 All vendor prefixes are handled for you. Just type the unprefixed version of a property, and the output file will include the required prefixes.
-
-### CoffeeScript
-
-.coffee files created inside the js folder will be converted to JS and have a script tag injected into the index.html file.
-
-### Javascript
-
-.js files created inside the js folder will have script tags injected into the index.html file.
 
 ### Bower
 
