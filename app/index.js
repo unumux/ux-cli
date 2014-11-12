@@ -21,8 +21,9 @@ var UxgenGenerator = yeoman.generators.Base.extend({
       this.src.copy('_bower.json', 'bower.json');
       this.src.copy('_Gruntfile.js', 'Gruntfile.js');
       this.src.copy('index.html', 'index.html');
-      this.src.copy('css/site.scss', 'css/site.scss');
+      this.src.copy('scss/site.scss', 'scss/site.scss');
       this.src.copy('js/site.js', 'js/site.js');
+      this.src.copy('js/modernizr/modernizr.2.7.1.min.js','js/modernizr/modernizr.2.7.1.min.js')
     }
   },
 
