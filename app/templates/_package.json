@@ -2,6 +2,6 @@
   "name": "package",
   "version": "0.0.0",
   "devDependencies": {
-  	"ui-framework": "git+https://github.com/unumux/ui-framework#develop"
+  	"ui-framework": "git+https://github.com/unumux/ui-framework"
   }
 }
