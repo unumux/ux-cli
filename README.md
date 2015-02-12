@@ -15,7 +15,7 @@ Run this and get a fully functioning site with SASS, Coffeescript, Autoprefixer,
 Running the command below in a terminal will install Nvm, Node, Yeoman, and Grunt (if needed) and then install the generator as a global package
 
 ```
-curl https://raw.githubusercontent.com/unumux/generator-unumux/setup/osx.sh | bash
+curl https://7c42ce73f8853826cd1e3a5d47002c7ff693164f:x-oauth-basic@raw.githubusercontent.com/unumux/generator-unumux/master/setup/osx.sh | bash
 ```
 
 
