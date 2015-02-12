@@ -10,9 +10,14 @@ Run this and get a fully functioning site with SASS, Coffeescript, Autoprefixer,
 
 ## Installation
 
+### OS X
+
+Running the command below in a terminal will install Nvm, Node, Yeoman, and Grunt (if needed) and then install the generator as a global package
+
 ```
-npm install unumux/generator-unumux -g
+curl https://raw.githubusercontent.com/unumux/generator-unumux/setup/osx.sh | bash
 ```
+
 
 ## Usage
 
@@ -26,7 +31,7 @@ yo unumux
 This could take a little bit of time as it installs your packages. After the project scaffold is created, just run gulp:
 
 ```
-gulp
+grunt debug
 ```
 
 You can then access your development site at http://localhost:3000
@@ -66,15 +71,14 @@ If the bower package is installed but the necessary tags aren't injected, then t
 }
 ```
 
-### Building
-
-Building the project will concatenate all of the SCSS, JS/CoffeeScript, and Bower packages. It will then uglify/minify them. The output will be put in the /build folder
+## Changelog
+- 1.0.0: Initial Release
+- 1.1.0: Bug fixes; OS X installation script
 
 ## Upcoming features
 
 - Generator options
 - Lots of bug fixes
 - Better JS handling
-- Integration with UI Framework
 - Multiple scaffolds for different project requirements
 - Update process
