@@ -2,8 +2,7 @@
   "name": "package",
   "version": "0.0.0",
   "dependencies": {
-    "colonial-branding": "unumux/colonial-branding"
+    "colonial-branding": "git+https://7c42ce73f8853826cd1e3a5d47002c7ff693164f:x-oauth-basic@github.com/unumux/colonial-branding.git"
   },
   "overrides": {}
 }
-
