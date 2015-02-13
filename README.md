@@ -1,12 +1,14 @@
 # uxgen
 
-Run this and get a fully functioning site with SASS, Coffeescript, Autoprefixer, and BrowserSync.
+Run this and get a fully functioning site with SASS, Autoprefixer, and BrowserSync.
 
 ## Requirements
 
 - Node (http://nodejs.org)
 - Yeoman (http://yeoman.io)
-- Gulp (http://gulpjs.com)
+- Grunt (http://gruntjs.com)
+
+These dependencies are installed automatically if you use one of the scripts below.
 
 ## Installation
 
@@ -36,7 +38,7 @@ cd C:\Projects\some-project
 yo unumux
 ```
 
-This could take a little bit of time as it installs your packages. After the project scaffold is created, just run gulp:
+This could take a little bit of time as it installs your packages. After the project scaffold is created, just run grunt:
 
 ```
 grunt debug
@@ -48,7 +50,7 @@ You can then access your development site at http://localhost:3000
 
 ### SASS
 
-Creating a new scss file inside of the css folder will automatically include it inside of the site.scss file. These files need to be prefixed with an "_" to be included. You can also prefix a file with a double underscore "__" to put them at the top of the app.scss file, before the bower files are included. This is useful for things such as variables and mixins.
+Creating a new scss file inside of the css folder will automatically include it inside of the site.scss file. These files need to be prefixed with an "__" to be included. You can also prefix a file with a double underscore "___" to put them at the top of the app.scss file, before the bower files are included. This is useful for things such as variables and mixins.
 
 ### Autoprefixer
 
