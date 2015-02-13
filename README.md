@@ -18,6 +18,14 @@ Running the command below in a terminal will install Nvm, Node, Yeoman, and Grun
 bash -c "$(curl https://7c42ce73f8853826cd1e3a5d47002c7ff693164f:x-oauth-basic@raw.githubusercontent.com/unumux/generator-unumux/master/setup/osx.sh)"
 ```
 
+### Windows
+
+Running the command below at your command prompt will install Git, Node, Yeoman, and Grunt (if needed) and then install the generator as a global package
+
+```
+@powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://7c42ce73f8853826cd1e3a5d47002c7ff693164f:x-oauth-basic@raw.githubusercontent.com/unumux/generator-unumux/master/setup/win.ps1'))
+```
+
 
 ## Usage
 
