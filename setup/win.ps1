@@ -4,29 +4,40 @@ Function Reload-Path {
   $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine")
 }
 
-Function Download-File($url, $targetFile) {
+Function Download-File($url, $targetFile, $auth) {
    $uri = New-Object "System.Uri" "$url"
    $request = [System.Net.HttpWebRequest]::Create($uri)
+   if($auth) {
+     $request.Headers.Add('authorization', 'Basic N2M0MmNlNzNmODg1MzgyNmNkMWUzYTVkNDcwMDJjN2ZmNjkzMTY0Zjp4LW9hdXRoLWJhc2ljCg==')
+   }
    $request.set_Timeout(15000) #15 second timeout
    $response = $request.GetResponse()
-   $totalLength = [System.Math]::Floor($response.get_ContentLength()/1024)
-   $responseStream = $response.GetResponseStream()
-   $targetStream = New-Object -TypeName System.IO.FileStream -ArgumentList $targetFile, Create
-   $buffer = new-object byte[] 10KB
-   $count = $responseStream.Read($buffer,0,$buffer.length)
-   $downloadedBytes = $count
-   while ($count -gt 0)
-   {
-       $targetStream.Write($buffer, 0, $count)
-       $count = $responseStream.Read($buffer,0,$buffer.length)
-       $downloadedBytes = $downloadedBytes + $count
-       Write-Progress -activity "Downloading file '$($url.split('/') | Select -Last 1)'" -status "Downloaded ($([System.Math]::Floor($downloadedBytes/1024))K of $($totalLength)K): " -PercentComplete ((([System.Math]::Floor($downloadedBytes/1024)) / $totalLength)  * 100)
+   $responseContentLength = $response.get_ContentLength()
+
+   if([int]$response.StatusCode -eq 200) {
+     if(-not ($responseContentLength -lt 1024) ) {
+       $totalLength = [System.Math]::Floor($response.get_ContentLength()/1024)
+     } else {
+       $totalLength = [System.Math]::Floor(1024/1024)
+     }
+     $responseStream = $response.GetResponseStream()
+     $targetStream = New-Object -TypeName System.IO.FileStream -ArgumentList $targetFile, Create
+     $buffer = new-object byte[] 10KB
+     $count = $responseStream.Read($buffer,0,$buffer.length)
+     $downloadedBytes = $count
+     while ($count -gt 0)
+     {
+         $targetStream.Write($buffer, 0, $count)
+         $count = $responseStream.Read($buffer,0,$buffer.length)
+         $downloadedBytes = $downloadedBytes + $count
+         Write-Progress -activity "Downloading file '$($url.split('/') | Select -Last 1)'" -status "Downloaded ($([System.Math]::Floor($downloadedBytes/1024))K of $($totalLength)K): " -PercentComplete ((([System.Math]::Floor($downloadedBytes/1024)) / $totalLength)  * 100)
+     }
+     Write-Progress -completed -activity "Downloading file '$($url.split('/') | Select -Last 1)'" -status "Downloaded ($([System.Math]::Floor($downloadedBytes/1024))K of $($totalLength)K): " -PercentComplete 100
+     $targetStream.Flush()
+     $targetStream.Close()
+     $targetStream.Dispose()
+     $responseStream.Dispose()
    }
-   Write-Progress -completed -activity "Downloading file '$($url.split('/') | Select -Last 1)'" -status "Downloaded ($([System.Math]::Floor($downloadedBytes/1024))K of $($totalLength)K): " -PercentComplete ((([System.Math]::Floor($downloadedBytes/1024)) / $totalLength)  * 100)
-   $targetStream.Flush()
-   $targetStream.Close()
-   $targetStream.Dispose()
-   $responseStream.Dispose()
 }
 
 Function Download-And-Install($name, $url, $file) {
@@ -48,7 +59,7 @@ Function Run-Main {
 
   if(-not (Get-Command git 2>$null)) {
     echo "git not installed. Downloading git..."
-    Download-File "https://7c42ce73f8853826cd1e3a5d47002c7ff693164f:x-oauth-basic@raw.githubusercontent.com/unumux/generator-unumux/master/setup/wingitsetup.inf" "$tmp\wingitsetup.inf"
+    Download-File "https://raw.githubusercontent.com/unumux/generator-unumux/master/setup/wingitsetup.inf" "$tmp\wingitsetup.inf" $TRUE
     Download-File "https://github.com/msysgit/msysgit/releases/download/Git-1.9.5-preview20141217/Git-1.9.5-preview20141217.exe" "$tmp\git.exe"
     echo "Installing git..."
     $installStatement = [System.Diagnostics.Process]::Start( "$tmp\git.exe", "/verysilent /loadinf=`"$tmp\wingitsetup.inf`"" )
