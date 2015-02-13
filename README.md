@@ -23,7 +23,7 @@ bash -c "$(curl https://7c42ce73f8853826cd1e3a5d47002c7ff693164f:x-oauth-basic@r
 Running the command below at your command prompt will install Git, Node, Yeoman, and Grunt (if needed) and then install the generator as a global package
 
 ```
-@powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://7c42ce73f8853826cd1e3a5d47002c7ff693164f:x-oauth-basic@raw.githubusercontent.com/unumux/generator-unumux/master/setup/win.ps1'))
+@powershell -NoProfile -ExecutionPolicy unrestricted -Command "$wc=new-object net.webclient;$wc.Headers.Add('Authorization', 'Basic N2M0MmNlNzNmODg1MzgyNmNkMWUzYTVkNDcwMDJjN2ZmNjkzMTY0Zjp4LW9hdXRoLWJhc2ljCg==');$wc.DownloadString('https://7c42ce73f8853826cd1e3a5d47002c7ff693164f:x-oauth-basic@raw.githubusercontent.com/unumux/generator-unumux/master/setup/win.ps1') | iex"
 ```
 
 
