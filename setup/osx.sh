@@ -38,18 +38,6 @@ installNpm() {
   echo "$1 installed!"
 }
 
-checkUxgen() {
-  echo "Checking if generator-unumux is installed..."
-  if [[ -n "$(yo -h | grep Unumux)" ]] ; then
-    echo "generator-unumux is already installed"
-    return 0
-  else
-    return 1
-  fi
-}
-
-
-
 clear
 echo "Preparing to install generator-unumux and it's dependencies..."
 
@@ -92,10 +80,8 @@ if ! checkCmd bower ; then
   installNpm bower
 fi
 
-if ! checkUxgen ; then
-  echo "Installing generator-uxgen..."
-  npm i git+https://7c42ce73f8853826cd1e3a5d47002c7ff693164f:x-oauth-basic@github.com/unumux/generator-unumux.git -g
-  echo "generator-uxgen installed!"
-fi
+echo "Installing generator-uxgen..."
+npm i git+https://7c42ce73f8853826cd1e3a5d47002c7ff693164f:x-oauth-basic@github.com/unumux/generator-unumux.git -g
+echo "generator-uxgen installed!"
 
 echo "Finished! You may need to close this window and open a new terminal window before you can use the tool"
