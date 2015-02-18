@@ -81,6 +81,16 @@ If the bower package is installed but the necessary tags aren't injected, then t
 }
 ```
 
+## Dev Mode (Developers only)
+
+This is only needed when working on the generator. This should NOT be used when running the generator.
+
+```
+yo unumux --dev
+```
+
+This will install the local copy of the UI Framework defined in the environment variable FRAMEWORKPATH.
+
 ## Changelog
 - 1.0.0: Initial Release
 - 1.1.0: Bug fixes; OS X installation script

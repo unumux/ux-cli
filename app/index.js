@@ -5,6 +5,10 @@ var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 
 var UxgenGenerator = yeoman.generators.Base.extend({
+  constructor: function () {
+    yeoman.generators.Base.apply(this, arguments);
+    this.option("dev");
+  },
   initializing: function () {
     this.pkg = require('../package.json');
   },
@@ -57,7 +61,7 @@ var UxgenGenerator = yeoman.generators.Base.extend({
       this.directory('static', '.');
       this.template('common/_bower.json', 'bower.json');
       this.template('common/_Gruntfile.js', 'Gruntfile.js');
-      this.template('common/_package.json', 'package.json');
+      this.template('common/_package.json', 'package.json', { devMode: this.options.dev, frameworkPath: process.env.FRAMEWORKPATH });
 
 
       // this.src.copy('_package.json', 'package.json');
