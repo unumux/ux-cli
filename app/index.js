@@ -22,9 +22,13 @@ var UxgenGenerator = yeoman.generators.Base.extend({
         ]
       },
       {
-        type: 'confirm',
+        type: 'list',
         name: 'newFolder',
-        message: "Would you like a new folder created?",
+        message: "Where would you like the generator to create your site?",
+        choices: [
+          { name: "In a New Directory (Create New Directory)", value: true },
+          { name: "Within my Current Directory", value: false }
+        ],
         when: function(a) {
           return a.type === 'static'
         }
