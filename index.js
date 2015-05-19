@@ -3,6 +3,8 @@
 var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 
+var gulpCmd = (process.platform === "win32" ? "gulp.cmd" : "gulp");
+
 
 function bowerInstall() {
     console.log("Installing bower packages...")
@@ -19,7 +21,7 @@ function npmInstall() {
 }
 
 function runGulp() {
-    spawn('gulp', ['--gulpfile=node_modules/@unumux/ui-framework/index.js', '--cwd=.'], {
+    spawn(gulpCmd, ['--gulpfile=node_modules/@unumux/ui-framework/index.js', '--cwd=.'], {
         stdio: [0, process.stdout, process.stderr]
     });
 }
