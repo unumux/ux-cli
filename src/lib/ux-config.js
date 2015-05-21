@@ -37,7 +37,7 @@ export class UXConfig {
             // if it isn't a folder, don't append globs
             return folder;
         }
-        
+
     }
 
     write(writePath) {

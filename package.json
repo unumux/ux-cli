@@ -2,9 +2,9 @@
   "name": "@unumux/ux-cli",
   "version": "2.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "bin": {
-    "ux": "index.js"
+    "ux": "dist/index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,5 +19,9 @@
     "lodash": "^3.9.1",
     "minimist": "^1.1.1",
     "prompt": "^0.2.14"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-babel": "^5.1.0"
   }
 }
