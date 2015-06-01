@@ -85,7 +85,7 @@ function installUIFramework() {
 }
 
 function createUXConfig() {
-    var shouldCreate, isSitecoreSite, paths, config, scssPath, jsPath, watchPaths;
+    var shouldCreate, isSitecoreSite, paths, config, scssPath, jsPath, watchPaths, compileJs, staticSite;
     return regeneratorRuntime.async(function createUXConfig$(context$1$0) {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
@@ -96,7 +96,7 @@ function createUXConfig() {
                 shouldCreate = context$1$0.sent;
 
                 if (!shouldCreate) {
-                    context$1$0.next = 25;
+                    context$1$0.next = 31;
                     break;
                 }
 
@@ -111,7 +111,7 @@ function createUXConfig() {
                 config = new UXConfig.Config(paths, false, false);
 
                 config.write('./ux.json');
-                context$1$0.next = 25;
+                context$1$0.next = 31;
                 break;
 
             case 11:
@@ -135,11 +135,21 @@ function createUXConfig() {
 
             case 22:
                 watchPaths = context$1$0.sent;
-                config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, false, false);
+                context$1$0.next = 25;
+                return question.yesNo('Should Javascript files be automatically concatenated/minified?');
+
+            case 25:
+                compileJs = context$1$0.sent;
+                context$1$0.next = 28;
+                return question.yesNo('Is this a static site?');
+
+            case 28:
+                staticSite = context$1$0.sent;
+                config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, staticSite, compileJs);
 
                 config.write('./ux.json');
 
-            case 25:
+            case 31:
             case 'end':
                 return context$1$0.stop();
         }
@@ -149,10 +159,10 @@ function createUXConfig() {
 function findGulpPath() {
     var gulpCmd = process.platform === 'win32' ? 'gulp.cmd' : 'gulp';
 
-    var searchPaths = ['node_modules/@unumux/ui-framework/node_modules/.bin/' + gulpCmd, 'node_modules/.bin/' + gulpCmd];
+    var searchPaths = [['node_modules', '@unumux', 'ui-framework', 'node_modules', '.bin', gulpCmd], ['node_modules', '.bin', gulpCmd]];
 
-    searchPaths.forEach(function (path) {
-        if (fs.existsSync(path)) {
+    searchPaths.forEach(function (searchPath) {
+        if (fs.existsSync(searchPath.join(path.sep))) {
             gulpCmd = path;
         }
     });

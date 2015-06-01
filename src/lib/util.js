@@ -61,7 +61,9 @@ export async function createUXConfig() {
             var scssPath = await question.list('Where are your SCSS files stored?', paths.scss);
             var jsPath = await question.list('Where are your JS files stored?', paths.js);
             var watchPaths = await question.checkbox('What other files/folders should trigger a refresh in the browser when files are changed?', paths.other);
-            let config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, false, false);
+            var compileJs = await question.yesNo('Should Javascript files be automatically concatenated/minified?');
+            var staticSite = await question.yesNo('Is this a static site?');
+            let config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, staticSite, compileJs);
             config.write('./ux.json');
         }
     }
@@ -71,12 +73,12 @@ function findGulpPath() {
     let gulpCmd = (process.platform === "win32" ? "gulp.cmd" : "gulp");
 
     let searchPaths = [
-        `node_modules/@unumux/ui-framework/node_modules/.bin/${gulpCmd}`,
-        `node_modules/.bin/${gulpCmd}`
+        ['node_modules', '@unumux', 'ui-framework', 'node_modules', '.bin', gulpCmd],
+        ['node_modules', '.bin', gulpCmd]
     ];
 
-    searchPaths.forEach(function(path) {
-        if(fs.existsSync(path)) {
+    searchPaths.forEach(function(searchPath) {
+        if(fs.existsSync(searchPath.join(path.sep))) {
             gulpCmd = path;
         }
     });
