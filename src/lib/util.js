@@ -78,8 +78,9 @@ function findGulpPath() {
     ];
 
     searchPaths.forEach(function(searchPath) {
-        if(fs.existsSync(searchPath.join(path.sep))) {
-            gulpCmd = path;
+        let searchPath = searchPath.join(path.sep);
+        if(fs.existsSync(searchPath) {
+            gulpCmd = searchPath;
         }
     });
 
