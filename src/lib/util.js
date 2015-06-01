@@ -77,9 +77,9 @@ function findGulpPath() {
         ['node_modules', '.bin', gulpCmd]
     ];
 
-    searchPaths.forEach(function(searchPath) {
-        let searchPath = searchPath.join(path.sep);
-        if(fs.existsSync(searchPath) {
+    searchPaths.forEach(function(searchPathTmp) {
+        let searchPath = searchPathTmp.join(path.sep);
+        if(fs.existsSync(searchPath)) {
             gulpCmd = searchPath;
         }
     });

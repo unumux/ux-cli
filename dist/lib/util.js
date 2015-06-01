@@ -161,9 +161,10 @@ function findGulpPath() {
 
     var searchPaths = [['node_modules', '@unumux', 'ui-framework', 'node_modules', '.bin', gulpCmd], ['node_modules', '.bin', gulpCmd]];
 
-    searchPaths.forEach(function (searchPath) {
-        if (fs.existsSync(searchPath.join(path.sep))) {
-            gulpCmd = path;
+    searchPaths.forEach(function (searchPathTmp) {
+        var searchPath = searchPathTmp.join(path.sep);
+        if (fs.existsSync(searchPath)) {
+            gulpCmd = searchPath;
         }
     });
 
