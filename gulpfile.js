@@ -4,7 +4,7 @@ var jsdoc = require('gulp-jsdoc');
 
 gulp.task('babel', function() {
     return gulp.src('src/**/*.js')
-               .pipe(babel())
+               .pipe(babel({stage: 1}))
                .pipe(gulp.dest('dist'));
 });
 

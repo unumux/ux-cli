@@ -1,95 +1,108 @@
 #!/usr/bin/env node
 'use strict';
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
+var _libQuestionJs = require('./lib/question.js');
+
+var question = _interopRequireWildcard(_libQuestionJs);
+
+var _libUtilJs = require('./lib/util.js');
+
+var util = _interopRequireWildcard(_libUtilJs);
+
+var _libUxConfigJs = require('./lib/ux-config.js');
+
+var _libUxConfigJs2 = _interopRequireDefault(_libUxConfigJs);
+
 require('babel-core/register');
-var spawn = require('child_process').spawn;
-var exec = require('child_process').exec;
 
-var inquirer = require('inquirer');
-var fs = require('fs');
-var path = require('path');
+var fs = require('fs'),
+    path = require('path'),
+    argv = require('minimist')(process.argv.slice(2));
 
-var argv = require('minimist')(process.argv.slice(2));
+function main() {
+    var reconfigure, packages;
+    return regeneratorRuntime.async(function main$(context$1$0) {
+        while (1) switch (context$1$0.prev = context$1$0.next) {
+            case 0:
+                context$1$0.prev = 0;
+                reconfigure = argv.reconfigure || argv.reconfig || argv.configure || argv.config;
 
-var gulpCmd = process.platform === 'win32' ? 'gulp.cmd' : 'gulp';
+                // if package.json does not exist, create it
+                if (!fs.existsSync('./package.json')) {
+                    util.createPackageJson();
+                }
 
-var checkForConfig = require('./lib/checkForConfig.js');
+                packages = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 
-function checkForUiFramework() {
-    fs.readFile('./package.json', function (err, contents) {
+                if (!(!packages.hasOwnProperty('devDependencies') || !packages.devDependencies.hasOwnProperty('@unumux/ui-framework'))) {
+                    context$1$0.next = 7;
+                    break;
+                }
 
-        // if package.json doesn't exist, create it
-        if (err && err.code === 'ENOENT') {
-            fs.writeFileSync('./package.json', JSON.stringify({}, null, 4));
-            installUiFramework();
-        } else {
-            var packagejson = JSON.parse(contents.toString());
+                context$1$0.next = 7;
+                return util.installUIFramework();
 
-            if (packagejson.hasOwnProperty('devDependencies') && packagejson.devDependencies.hasOwnProperty('@unumux/ui-framework')) {
-                checkForConfig(npmInstall);
-            } else {
-                installUiFramework();
-            }
+            case 7:
+                if (!(!fs.existsSync('./ux.json') || reconfigure)) {
+                    context$1$0.next = 10;
+                    break;
+                }
+
+                context$1$0.next = 10;
+                return util.createUXConfig();
+
+            case 10:
+                if (!(argv.packages !== false)) {
+                    context$1$0.next = 17;
+                    break;
+                }
+
+                if (!(argv.npm !== false)) {
+                    context$1$0.next = 14;
+                    break;
+                }
+
+                context$1$0.next = 14;
+                return util.npmInstall();
+
+            case 14:
+                if (!(argv.bower !== false)) {
+                    context$1$0.next = 17;
+                    break;
+                }
+
+                context$1$0.next = 17;
+                return util.bowerInstall();
+
+            case 17:
+
+                util.runGulp();
+
+                context$1$0.next = 23;
+                break;
+
+            case 20:
+                context$1$0.prev = 20;
+                context$1$0.t0 = context$1$0['catch'](0);
+
+                console.log(context$1$0.t0);
+
+            case 23:
+            case 'end':
+                return context$1$0.stop();
         }
-    });
+    }, null, this, [[0, 20]]);
 }
 
-function installUiFramework() {
-    inquirer.prompt([{
-        type: 'list',
-        name: 'continue',
-        message: 'UI Framework not found. Would you like to install it?',
-        choices: [{
-            name: 'Yes',
-            value: true
-        }, {
-            name: 'No',
-            value: false
-        }]
-    }], function (answers) {
-        if (answers['continue']) {
-            console.log('Installing UI Framework...');
-            exec('npm install @unumux/ui-framework --save-dev', function () {
-                checkForConfig(npmInstall);
-            });
-        } else {
-            process.exit();
-        }
-    });
-}
+main();
 
-function bowerInstall() {
-    if (argv.packages === false || argv.bower === false) {
-        runGulp();
-        return;
-    }
+// aliases for reconfigure switch
+// load package.json and check if ui-framework is installed
 
-    console.log('Installing bower packages...');
-    exec('bower install', function () {
-        runGulp();
-    });
-}
+// create config file, if it does not exist or if reconfigure switch is passed
 
-function npmInstall() {
-    if (argv.packages === false || argv.npm === false) {
-        bowerInstall();
-        return;
-    }
-
-    console.log('Installing npm packages...');
-    exec('npm install', function () {
-        bowerInstall();
-    });
-}
-
-function runGulp() {
-    var gulp = spawn(gulpCmd, ['--gulpfile=node_modules/@unumux/ui-framework/index.js', '--cwd=.'], {
-        stdio: [0, process.stdout, process.stderr]
-    });
-
-    gulp.on('close', function (code) {
-        if (code !== 0) {}
-    });
-}
-
-checkForUiFramework();
+// install packages if switches to override are not set
