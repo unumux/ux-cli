@@ -220,15 +220,15 @@ function findFiles(globPath, ignorePaths) {
         });
 
         var scssPaths = _.uniq(_.union(result['.scss'], result['.sass']).map(function (file) {
-            return file.split(path.sep)[0];
+            return file.split('/')[0];
         }));
 
         var jsPaths = _.uniq(result['.js'].map(function (file) {
-            return file.split(path.sep)[0];
+            return file.split('/')[0];
         }));
 
         var otherPaths = _.uniq(_.flatten(_.values(_.omit(result, ['.js', '.scss', '.sass']))).map(function (file) {
-            return file.split(path.sep)[0];
+            return file.split('/')[0];
         }));
 
         otherPaths = otherPaths.filter(function (path) {
