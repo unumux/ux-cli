@@ -235,13 +235,14 @@ function findGulpPath() {
     return gulpCmd;
 }
 
-function runGulp() {
-    var gulpCmd, gulp;
+function runGulp(args) {
+    var gulpCmd, gulpArgs, gulp;
     return regeneratorRuntime.async(function runGulp$(context$1$0) {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
                 gulpCmd = findGulpPath();
-                gulp = spawn(gulpCmd, ['--gulpfile=node_modules/@unumux/ui-framework/index.js', '--cwd=.'], {
+                gulpArgs = args.concat(['--gulpfile=node_modules/@unumux/ui-framework/index.js', '--cwd=.']);
+                gulp = spawn(gulpCmd, gulpArgs, {
                     stdio: [0, process.stdout, process.stderr]
                 });
 
@@ -250,7 +251,7 @@ function runGulp() {
                     if (code !== 0) {}
                 });
 
-            case 3:
+            case 4:
             case 'end':
                 return context$1$0.stop();
         }

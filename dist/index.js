@@ -80,7 +80,7 @@ function main() {
 
             case 17:
 
-                util.runGulp();
+                util.runGulp(argv._);
 
                 context$1$0.next = 23;
                 break;

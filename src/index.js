@@ -48,7 +48,7 @@ async function main() {
 
         }
 
-        util.runGulp();
+        util.runGulp(argv._);
 
     } catch(e) {
         console.log(e);

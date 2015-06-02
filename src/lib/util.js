@@ -113,10 +113,11 @@ function findGulpPath() {
     return gulpCmd;
 }
 
-export async function runGulp() {
+export async function runGulp(args) {
     let gulpCmd = findGulpPath();
-
-    var gulp = spawn(gulpCmd, ['--gulpfile=node_modules/@unumux/ui-framework/index.js', '--cwd=.'], {
+    let gulpArgs = args.concat(['--gulpfile=node_modules/@unumux/ui-framework/index.js', '--cwd=.']);
+    
+    var gulp = spawn(gulpCmd, gulpArgs, {
         stdio: [0, process.stdout, process.stderr]
     });
 
