@@ -22,6 +22,10 @@ var _questionJs = require('./question.js');
 
 var question = _interopRequireWildcard(_questionJs);
 
+var _scaffoldJs = require('./scaffold.js');
+
+var scaffold = _interopRequireWildcard(_scaffoldJs);
+
 require('babel-core/register');
 
 var exec = require('child_process').exec,
@@ -84,8 +88,94 @@ function installUIFramework() {
     }, null, this);
 }
 
+function generateConfig(paths) {
+    var scssPath, jsPath, watchPaths, compileJs, staticSite, config;
+    return regeneratorRuntime.async(function generateConfig$(context$1$0) {
+        while (1) switch (context$1$0.prev = context$1$0.next) {
+            case 0:
+                if (!(paths.scss.length > 1)) {
+                    context$1$0.next = 6;
+                    break;
+                }
+
+                context$1$0.next = 3;
+                return question.list('Where are your SCSS files stored?', paths.scss);
+
+            case 3:
+                scssPath = context$1$0.sent;
+                context$1$0.next = 7;
+                break;
+
+            case 6:
+                if (paths.scss.length > 0) {
+                    scssPath = paths.scss[0];
+                }
+
+            case 7:
+                if (!(paths.js.length > 1)) {
+                    context$1$0.next = 13;
+                    break;
+                }
+
+                context$1$0.next = 10;
+                return question.list('Where are your JS files stored?', paths.js);
+
+            case 10:
+                jsPath = context$1$0.sent;
+                context$1$0.next = 14;
+                break;
+
+            case 13:
+                if (paths.js.length > 0) {
+                    jsPath = paths.js[0];
+                }
+
+            case 14:
+                if (!(paths.other.length > 0)) {
+                    context$1$0.next = 22;
+                    break;
+                }
+
+                if (!(paths.other.length === 1 && paths.other[0] === 'index.html')) {
+                    context$1$0.next = 19;
+                    break;
+                }
+
+                watchPaths = ['index.html'];
+                context$1$0.next = 22;
+                break;
+
+            case 19:
+                context$1$0.next = 21;
+                return question.checkbox('What other files/folders should trigger a refresh in the browser when files are changed?', paths.other);
+
+            case 21:
+                watchPaths = context$1$0.sent;
+
+            case 22:
+                context$1$0.next = 24;
+                return question.yesNo('Should Javascript files be automatically concatenated/minified?');
+
+            case 24:
+                compileJs = context$1$0.sent;
+                context$1$0.next = 27;
+                return question.yesNo('Is this a static site?');
+
+            case 27:
+                staticSite = context$1$0.sent;
+                config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, staticSite, compileJs);
+
+                config.write('./ux.json');
+
+            case 30:
+            case 'end':
+                return context$1$0.stop();
+        }
+    }, null, this);
+}
+
 function createUXConfig() {
-    var shouldCreate, isSitecoreSite, paths, config, scssPath, jsPath, watchPaths, compileJs, staticSite;
+    var shouldCreate, isSitecoreSite, paths, config;
     return regeneratorRuntime.async(function createUXConfig$(context$1$0) {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
@@ -96,7 +186,7 @@ function createUXConfig() {
                 shouldCreate = context$1$0.sent;
 
                 if (!shouldCreate) {
-                    context$1$0.next = 31;
+                    context$1$0.next = 16;
                     break;
                 }
 
@@ -111,7 +201,7 @@ function createUXConfig() {
                 config = new UXConfig.Config(paths, false, false);
 
                 config.write('./ux.json');
-                context$1$0.next = 31;
+                context$1$0.next = 16;
                 break;
 
             case 11:
@@ -121,35 +211,9 @@ function createUXConfig() {
             case 13:
                 paths = context$1$0.sent;
                 context$1$0.next = 16;
-                return question.list('Where are your SCSS files stored?', paths.scss);
+                return generateConfig(paths);
 
             case 16:
-                scssPath = context$1$0.sent;
-                context$1$0.next = 19;
-                return question.list('Where are your JS files stored?', paths.js);
-
-            case 19:
-                jsPath = context$1$0.sent;
-                context$1$0.next = 22;
-                return question.checkbox('What other files/folders should trigger a refresh in the browser when files are changed?', paths.other);
-
-            case 22:
-                watchPaths = context$1$0.sent;
-                context$1$0.next = 25;
-                return question.yesNo('Should Javascript files be automatically concatenated/minified?');
-
-            case 25:
-                compileJs = context$1$0.sent;
-                context$1$0.next = 28;
-                return question.yesNo('Is this a static site?');
-
-            case 28:
-                staticSite = context$1$0.sent;
-                config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, staticSite, compileJs);
-
-                config.write('./ux.json');
-
-            case 31:
             case 'end':
                 return context$1$0.stop();
         }
@@ -194,47 +258,121 @@ function runGulp() {
 }
 
 function findFiles(globPath, ignorePaths) {
-    return new Promise(function (resolve, reject) {
-        // find all folders in directory, then remove ignoredPaths.
-        // This is faster than using **/* with ignore
-        var allFilesFolders = fs.readdirSync(globPath);
+    var allFilesFolders, folders, fileSearchExtensions, folderGlob, files, rootFileGlob, result, scssPaths, jsPaths, otherPaths, scaffoldFullSite, scaffoldPaths, scaffoldStyles, scaffoldScripts, scaffoldMarkup;
+    return regeneratorRuntime.async(function findFiles$(context$1$0) {
+        while (1) switch (context$1$0.prev = context$1$0.next) {
+            case 0:
+                allFilesFolders = fs.readdirSync(globPath);
+                folders = allFilesFolders.filter(function (file) {
+                    return fs.statSync(file).isDirectory() && ignorePaths.indexOf(file) < 0;
+                });
+                fileSearchExtensions = ['scss', 'sass', 'cshtml', 'html', 'css', 'aspx', 'js'];
+                folderGlob = '{' + folders.join(',') + '}/**/*.{' + fileSearchExtensions.join(',') + '}';
+                files = glob.sync(folderGlob, { nocase: true });
+                rootFileGlob = '*.{html,cshtml,aspx,css}';
 
-        // filter to include only folders that are not ignored
-        var folders = allFilesFolders.filter(function (file) {
-            return fs.statSync(file).isDirectory() && ignorePaths.indexOf(file) < 0;
-        });
+                files = files.concat(glob.sync(rootFileGlob, { nocase: true }));
 
-        var fileSearchExtensions = ['scss', 'sass', 'cshtml', 'html', 'css', 'aspx', 'js'];
+                result = _.groupBy(files, function (file) {
+                    return path.extname(file);
+                });
+                scssPaths = _.uniq(_.union(result['.scss'], result['.sass']).map(function (file) {
+                    return file.split('/')[0];
+                }));
+                jsPaths = _.uniq(_.union(result['.js'], []).map(function (file) {
+                    return file.split('/')[0];
+                }));
+                otherPaths = _.uniq(_.flatten(_.values(_.omit(result, ['.js', '.scss', '.sass']))).map(function (file) {
+                    return file.split('/')[0];
+                }));
 
-        var folderGlob = '{' + folders.join(',') + '}/**/*.{' + fileSearchExtensions.join(',') + '}';
+                otherPaths = otherPaths.filter(function (path) {
+                    return scssPaths.indexOf(path) < 0;
+                });
 
-        var files = glob.sync(folderGlob, { nocase: true });
+                if (!(scssPaths.length === 0 && jsPaths.length === 0 && otherPaths.length === 0)) {
+                    context$1$0.next = 19;
+                    break;
+                }
 
-        // this will let us watch files in root (only non-sass/js files for now)
-        var rootFileGlob = '*.{html,cshtml,aspx,css}';
+                context$1$0.next = 15;
+                return question.yesNo('No styles, scripts, or markup were found. Would you like to scaffold a basic site?');
 
-        files = files.concat(glob.sync(rootFileGlob, { nocase: true }));
+            case 15:
+                scaffoldFullSite = context$1$0.sent;
 
-        var result = _.groupBy(files, function (file) {
-            return path.extname(file);
-        });
+                if (scaffoldFullSite) {
+                    scaffoldPaths = scaffold.fullSite(process.cwd());
 
-        var scssPaths = _.uniq(_.union(result['.scss'], result['.sass']).map(function (file) {
-            return file.split('/')[0];
-        }));
+                    scssPaths = scaffoldPaths.scss;
+                    jsPaths = scaffoldPaths.js;
+                    otherPaths = scaffoldPaths.other;
+                }
 
-        var jsPaths = _.uniq(result['.js'].map(function (file) {
-            return file.split('/')[0];
-        }));
+                context$1$0.next = 34;
+                break;
 
-        var otherPaths = _.uniq(_.flatten(_.values(_.omit(result, ['.js', '.scss', '.sass']))).map(function (file) {
-            return file.split('/')[0];
-        }));
+            case 19:
+                if (!(scssPaths.length === 0)) {
+                    context$1$0.next = 24;
+                    break;
+                }
 
-        otherPaths = otherPaths.filter(function (path) {
-            return scssPaths.indexOf(path) < 0;
-        });
+                context$1$0.next = 22;
+                return question.yesNo('No styles were found. Would you like to create a site.scss?');
 
-        resolve({ scss: scssPaths, js: jsPaths, other: otherPaths });
-    });
+            case 22:
+                scaffoldStyles = context$1$0.sent;
+
+                if (scaffoldStyles) {
+                    scssPaths = scaffold.styles(process.cwd());
+                }
+
+            case 24:
+                if (!(jsPaths.length === 0)) {
+                    context$1$0.next = 29;
+                    break;
+                }
+
+                context$1$0.next = 27;
+                return question.yesNo('No scripts were found. Would you like to create a site.js?');
+
+            case 27:
+                scaffoldScripts = context$1$0.sent;
+
+                if (scaffoldScripts) {
+                    jsPaths = scaffold.scripts(process.cwd());
+                }
+
+            case 29:
+                if (!(otherPaths.length === 0)) {
+                    context$1$0.next = 34;
+                    break;
+                }
+
+                context$1$0.next = 32;
+                return question.yesNo('No markup was found. Would you like to create an index.html?');
+
+            case 32:
+                scaffoldMarkup = context$1$0.sent;
+
+                if (scaffoldMarkup) {
+                    otherPaths = scaffold.markup(process.cwd());
+                }
+
+            case 34:
+                return context$1$0.abrupt('return', { scss: scssPaths, js: jsPaths, other: otherPaths });
+
+            case 35:
+            case 'end':
+                return context$1$0.stop();
+        }
+    }, null, this);
 }
+
+// find all folders in directory, then remove ignoredPaths.
+// This is faster than using **/* with ignore
+
+// filter to include only folders that are not ignored
+
+// this will let us watch files in root (only non-sass/js files for now)

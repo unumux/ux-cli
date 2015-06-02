@@ -9,6 +9,7 @@ var exec = require('child_process').exec,
 
 import * as UXConfig from './ux-config.js';
 import * as question from './question.js';
+import * as scaffold from './scaffold.js';
 
 
 export function execCmd(cmd) {
@@ -46,6 +47,35 @@ export async function installUIFramework() {
     }
 }
 
+async function generateConfig(paths) {
+    if(paths.scss.length > 1) {
+        var scssPath = await question.list('Where are your SCSS files stored?', paths.scss);
+    }
+    else if(paths.scss.length > 0) {
+        var scssPath = paths.scss[0];
+    }
+
+    if(paths.js.length > 1) {
+        var jsPath = await question.list('Where are your JS files stored?', paths.js);
+    }
+    else if(paths.js.length > 0) {
+        var jsPath = paths.js[0];
+    }
+
+    if(paths.other.length > 0) {
+        if(paths.other.length === 1 && paths.other[0] === "index.html") {
+            var watchPaths = ["index.html"];
+        } else {
+            var watchPaths = await question.checkbox('What other files/folders should trigger a refresh in the browser when files are changed?', paths.other);
+        }
+    }
+    var compileJs = await question.yesNo('Should Javascript files be automatically concatenated/minified?');
+    var staticSite = await question.yesNo('Is this a static site?');
+    var config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, staticSite, compileJs);
+
+    config.write('./ux.json');
+}
+
 export async function createUXConfig() {
     let shouldCreate = await question.yesNo('ux.json not found. Would you like to create one?');
 
@@ -58,13 +88,9 @@ export async function createUXConfig() {
             config.write('./ux.json');
         } else {
             let paths = await UXConfig.findPaths(process.cwd());
-            var scssPath = await question.list('Where are your SCSS files stored?', paths.scss);
-            var jsPath = await question.list('Where are your JS files stored?', paths.js);
-            var watchPaths = await question.checkbox('What other files/folders should trigger a refresh in the browser when files are changed?', paths.other);
-            var compileJs = await question.yesNo('Should Javascript files be automatically concatenated/minified?');
-            var staticSite = await question.yesNo('Is this a static site?');
-            let config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, staticSite, compileJs);
-            config.write('./ux.json');
+            await generateConfig(paths)
+
+
         }
     }
 }
@@ -103,8 +129,7 @@ export async function runGulp() {
     });
 }
 
-export function findFiles(globPath, ignorePaths) {
-    return new Promise((resolve,reject) => {
+export async function findFiles(globPath, ignorePaths) {
         // find all folders in directory, then remove ignoredPaths.
         // This is faster than using **/* with ignore
         let allFilesFolders = fs.readdirSync(globPath);
@@ -133,7 +158,7 @@ export function findFiles(globPath, ignorePaths) {
             return file.split("/")[0];
         }));
 
-        var jsPaths = _.uniq(result['.js'].map(function(file) {
+        var jsPaths = _.uniq(_.union(result['.js'], []).map(function(file) {
             return file.split("/")[0];
         }));
 
@@ -145,6 +170,39 @@ export function findFiles(globPath, ignorePaths) {
             return scssPaths.indexOf(path) < 0;
         });
 
-        resolve({scss: scssPaths, js: jsPaths, other: otherPaths});
-    })
+        if(scssPaths.length === 0 && jsPaths.length === 0 && otherPaths.length === 0) {
+
+            var scaffoldFullSite = await question.yesNo('No styles, scripts, or markup were found. Would you like to scaffold a basic site?');
+            if(scaffoldFullSite) {
+                let scaffoldPaths = scaffold.fullSite(process.cwd());
+                scssPaths = scaffoldPaths.scss;
+                jsPaths = scaffoldPaths.js;
+                otherPaths = scaffoldPaths.other;
+            }
+
+        } else {
+
+            if(scssPaths.length === 0) {
+                var scaffoldStyles = await question.yesNo('No styles were found. Would you like to create a site.scss?');
+                if(scaffoldStyles) {
+                    scssPaths = scaffold.styles(process.cwd());
+                }
+            }
+
+            if(jsPaths.length === 0) {
+                var scaffoldScripts = await question.yesNo('No scripts were found. Would you like to create a site.js?');
+                if(scaffoldScripts) {
+                    jsPaths = scaffold.scripts(process.cwd());
+                }
+            }
+
+            if(otherPaths.length === 0) {
+                var scaffoldMarkup = await question.yesNo('No markup was found. Would you like to create an index.html?');
+                if(scaffoldMarkup) {
+                    otherPaths = scaffold.markup(process.cwd());
+                }
+            }
+        }
+
+        return {scss: scssPaths, js: jsPaths, other: otherPaths};
 }
