@@ -69,9 +69,18 @@ async function generateConfig(paths) {
             var watchPaths = await question.checkbox('What other files/folders should trigger a refresh in the browser when files are changed?', paths.other);
         }
     }
-    var compileJs = await question.yesNo('Should Javascript files be automatically concatenated/minified?');
+    var compileJs = await question.yesNo('Should Javascript files be processed with Browserify?');
+
+    if(compileJs) {
+        var jsFiles = glob.sync(path.join(jsPath, '**/*.js'), {ignore: ['**/*.min.js']});
+        var mainJsFile = await question.list('Which JS file is your main (entry) file?', jsFiles);
+    } else {
+        var mainJsFile = false;
+    }
+
+
     var staticSite = await question.yesNo('Is this a static site?');
-    var config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, staticSite, compileJs);
+    var config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, staticSite, compileJs, mainJsFile);
 
     config.write('./ux.json');
 }
@@ -116,7 +125,7 @@ function findGulpPath() {
 export async function runGulp(args) {
     let gulpCmd = findGulpPath();
     let gulpArgs = args.concat(['--gulpfile=node_modules/@unumux/ui-framework/index.js', '--cwd=.']);
-    
+
     var gulp = spawn(gulpCmd, gulpArgs, {
         stdio: [0, process.stdout, process.stderr]
     });

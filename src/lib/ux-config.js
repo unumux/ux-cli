@@ -4,7 +4,7 @@ var fs = require('fs'),
 import * as util from "./util.js";
 
 export class Config {
-    constructor(paths, server=false, compileJs=true) {
+    constructor(paths, server=false, compileJs=true, mainJsFile) {
         this.scss = {
             src: this.appendGlobs(paths.scss, 'scss'),
             dest: paths.scss
@@ -22,9 +22,12 @@ export class Config {
         this.compileJs = compileJs;
 
         // if we aren't compiling JS, set it to be a watched folder as well
-        if(!this.compileJs) {
+        if(this.compileJs && mainJsFile) {
+            this.js.main = mainJsFile;
+        } else {
             this.watch.push(this.js.src);
         }
+
 
     }
 

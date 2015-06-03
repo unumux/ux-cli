@@ -47,10 +47,11 @@ var fs = require('fs'),
     path = require('path');
 
 var Config = (function () {
-    function Config(paths) {
+    function Config(paths, _x, _x2, mainJsFile) {
+        var server = arguments[1] === undefined ? false : arguments[1];
+
         var _this = this;
 
-        var server = arguments[1] === undefined ? false : arguments[1];
         var compileJs = arguments[2] === undefined ? true : arguments[2];
 
         _classCallCheck(this, Config);
@@ -72,7 +73,9 @@ var Config = (function () {
         this.compileJs = compileJs;
 
         // if we aren't compiling JS, set it to be a watched folder as well
-        if (!this.compileJs) {
+        if (this.compileJs && mainJsFile) {
+            this.js.main = mainJsFile;
+        } else {
             this.watch.push(this.js.src);
         }
     }

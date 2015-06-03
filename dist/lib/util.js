@@ -89,7 +89,7 @@ function installUIFramework() {
 }
 
 function generateConfig(paths) {
-    var scssPath, jsPath, watchPaths, compileJs, staticSite, config;
+    var scssPath, jsPath, watchPaths, compileJs, jsFiles, mainJsFile, staticSite, config;
     return regeneratorRuntime.async(function generateConfig$(context$1$0) {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
@@ -154,20 +154,39 @@ function generateConfig(paths) {
 
             case 22:
                 context$1$0.next = 24;
-                return question.yesNo('Should Javascript files be automatically concatenated/minified?');
+                return question.yesNo('Should Javascript files be processed with Browserify?');
 
             case 24:
                 compileJs = context$1$0.sent;
-                context$1$0.next = 27;
+
+                if (!compileJs) {
+                    context$1$0.next = 32;
+                    break;
+                }
+
+                jsFiles = glob.sync(path.join(jsPath, '**/*.js'), { ignore: ['**/*.min.js'] });
+                context$1$0.next = 29;
+                return question.list('Which JS file is your main (entry) file?', jsFiles);
+
+            case 29:
+                mainJsFile = context$1$0.sent;
+                context$1$0.next = 33;
+                break;
+
+            case 32:
+                mainJsFile = false;
+
+            case 33:
+                context$1$0.next = 35;
                 return question.yesNo('Is this a static site?');
 
-            case 27:
+            case 35:
                 staticSite = context$1$0.sent;
-                config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, staticSite, compileJs);
+                config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, staticSite, compileJs, mainJsFile);
 
                 config.write('./ux.json');
 
-            case 30:
+            case 38:
             case 'end':
                 return context$1$0.stop();
         }
