@@ -28,6 +28,15 @@ export function createPackageJson() {
     fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 4));
 }
 
+export function createBowerJson() {
+    let bowerJson = {
+        private: true,
+        name: path.basename(process.cwd())
+    }
+
+    fs.writeFileSync('./bower.json', JSON.stringify(bowerJson, null, 4));
+}
+
 export function bowerInstall() {
     console.log('Installing Bower packages...');
     return execCmd('bower install');
@@ -215,4 +224,21 @@ export async function findFiles(globPath, ignorePaths) {
         }
 
         return {scss: scssPaths, js: jsPaths, other: otherPaths};
+}
+
+export async function installLibraries() {
+    var additionalLibraries = await question.checkbox('Would you like to install any additional libraries?', [
+        { name: 'Colonial Life Framework & Branding', value: 'unumux/colonial-branding' },
+        { name: 'Unum Framework & Branding', value: 'unumux/unum-branding' },
+        { name: 'jQuery', value: 'jquery' },
+        { name: 'Knockout', value: 'knockout' },
+        { name: 'Angular', value: 'angular' },
+        { name: 'ReactJS', value: 'react' }
+    ]);
+
+    if(additionalLibraries.length > 0) {
+        await execCmd(`bower install --save ${additionalLibraries.join(' ')}`);
+    }
+
+
 }

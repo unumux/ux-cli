@@ -24,7 +24,7 @@ var fs = require('fs'),
     argv = require('minimist')(process.argv.slice(2));
 
 function main() {
-    var reconfigure, packages;
+    var reconfigure, packages, newInstall;
     return regeneratorRuntime.async(function main$(context$1$0) {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
@@ -36,66 +36,82 @@ function main() {
                     util.createPackageJson();
                 }
 
+                // if package.json does not exist, create it
+                if (!fs.existsSync('./bower.json')) {
+                    util.createBowerJson();
+                }
+
                 packages = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 
                 if (!(!packages.hasOwnProperty('devDependencies') || !packages.devDependencies.hasOwnProperty('@unumux/ui-framework'))) {
-                    context$1$0.next = 7;
+                    context$1$0.next = 8;
                     break;
                 }
 
-                context$1$0.next = 7;
+                context$1$0.next = 8;
                 return util.installUIFramework();
 
-            case 7:
-                if (!(!fs.existsSync('./ux.json') || reconfigure)) {
-                    context$1$0.next = 10;
+            case 8:
+                newInstall = !fs.existsSync('./ux.json');
+
+                if (!(newInstall || reconfigure)) {
+                    context$1$0.next = 12;
                     break;
                 }
 
-                context$1$0.next = 10;
+                context$1$0.next = 12;
                 return util.createUXConfig();
 
-            case 10:
+            case 12:
+                if (!(newInstall || reconfigure || argv.install)) {
+                    context$1$0.next = 15;
+                    break;
+                }
+
+                context$1$0.next = 15;
+                return util.installLibraries();
+
+            case 15:
                 if (!(argv.packages !== false)) {
-                    context$1$0.next = 17;
+                    context$1$0.next = 22;
                     break;
                 }
 
                 if (!(argv.npm !== false)) {
-                    context$1$0.next = 14;
+                    context$1$0.next = 19;
                     break;
                 }
 
-                context$1$0.next = 14;
+                context$1$0.next = 19;
                 return util.npmInstall();
 
-            case 14:
+            case 19:
                 if (!(argv.bower !== false)) {
-                    context$1$0.next = 17;
+                    context$1$0.next = 22;
                     break;
                 }
 
-                context$1$0.next = 17;
+                context$1$0.next = 22;
                 return util.bowerInstall();
 
-            case 17:
+            case 22:
 
                 util.runGulp(argv._);
 
-                context$1$0.next = 23;
+                context$1$0.next = 28;
                 break;
 
-            case 20:
-                context$1$0.prev = 20;
+            case 25:
+                context$1$0.prev = 25;
                 context$1$0.t0 = context$1$0['catch'](0);
 
                 console.log(context$1$0.t0);
 
-            case 23:
+            case 28:
             case 'end':
                 return context$1$0.stop();
         }
-    }, null, this, [[0, 20]]);
+    }, null, this, [[0, 25]]);
 }
 
 main();
@@ -104,5 +120,7 @@ main();
 // load package.json and check if ui-framework is installed
 
 // create config file, if it does not exist or if reconfigure switch is passed
+
+// install additional libraries, if first setup, if reconfigure switch is passed, or if --install is passed
 
 // install packages if switches to override are not set

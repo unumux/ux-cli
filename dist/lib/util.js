@@ -5,12 +5,14 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports.execCmd = execCmd;
 exports.createPackageJson = createPackageJson;
+exports.createBowerJson = createBowerJson;
 exports.bowerInstall = bowerInstall;
 exports.npmInstall = npmInstall;
 exports.installUIFramework = installUIFramework;
 exports.createUXConfig = createUXConfig;
 exports.runGulp = runGulp;
 exports.findFiles = findFiles;
+exports.installLibraries = installLibraries;
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
@@ -49,6 +51,15 @@ function createPackageJson() {
     };
 
     fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 4));
+}
+
+function createBowerJson() {
+    var bowerJson = {
+        'private': true,
+        name: path.basename(process.cwd())
+    };
+
+    fs.writeFileSync('./bower.json', JSON.stringify(bowerJson, null, 4));
 }
 
 function bowerInstall() {
@@ -384,6 +395,32 @@ function findFiles(globPath, ignorePaths) {
                 return context$1$0.abrupt('return', { scss: scssPaths, js: jsPaths, other: otherPaths });
 
             case 35:
+            case 'end':
+                return context$1$0.stop();
+        }
+    }, null, this);
+}
+
+function installLibraries() {
+    var additionalLibraries;
+    return regeneratorRuntime.async(function installLibraries$(context$1$0) {
+        while (1) switch (context$1$0.prev = context$1$0.next) {
+            case 0:
+                context$1$0.next = 2;
+                return question.checkbox('Would you like to install any additional libraries?', [{ name: 'Colonial Life Framework & Branding', value: 'unumux/colonial-branding' }, { name: 'Unum Framework & Branding', value: 'unumux/unum-branding' }, { name: 'jQuery', value: 'jquery' }, { name: 'Knockout', value: 'knockout' }, { name: 'Angular', value: 'angular' }, { name: 'ReactJS', value: 'react' }]);
+
+            case 2:
+                additionalLibraries = context$1$0.sent;
+
+                if (!(additionalLibraries.length > 0)) {
+                    context$1$0.next = 6;
+                    break;
+                }
+
+                context$1$0.next = 6;
+                return execCmd('bower install --save ' + additionalLibraries.join(' '));
+
+            case 6:
             case 'end':
                 return context$1$0.stop();
         }

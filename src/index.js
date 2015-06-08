@@ -22,6 +22,12 @@ async function main() {
             util.createPackageJson();
         }
 
+
+        // if package.json does not exist, create it
+        if(!fs.existsSync('./bower.json')) {
+            util.createBowerJson();
+        }
+
         // load package.json and check if ui-framework is installed
         var packages = JSON.parse(fs.readFileSync('./package.json','utf8'));
 
@@ -29,11 +35,17 @@ async function main() {
             await util.installUIFramework();
         }
 
+        var newInstall = !fs.existsSync('./ux.json');
+
         // create config file, if it does not exist or if reconfigure switch is passed
-        if(!fs.existsSync('./ux.json') || reconfigure) {
+        if(newInstall || reconfigure) {
             await util.createUXConfig();
         }
 
+        // install additional libraries, if first setup, if reconfigure switch is passed, or if --install is passed
+        if(newInstall || reconfigure || argv.install) {
+            await util.installLibraries();
+        }
 
         // install packages if switches to override are not set
         if(argv.packages !== false) {
