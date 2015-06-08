@@ -6,33 +6,8 @@ Object.defineProperty(exports, '__esModule', {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-/**
- * detectIfSitecoreSite - determines if a given folder is inside of a Sitecore site
- *
- * @param  {string} dir
- * @return {boolean}     is this a Sitecore site?
- */
-
 exports.detectIfSitecoreSite = detectIfSitecoreSite;
-
-/**
- * findSitecorePaths - determine paths of styles/scripts/other watchable files
- *                     for a Sitecore site
- *
- * @param  {string} dir current directory
- * @return {object}     paths
- */
-
 exports.findSitecorePaths = findSitecorePaths;
-
-/**
- * findPaths - determine paths of styles/scripts/other watchable files
- *             fot a non-Sitecore site
- *
- * @param  {string} dir current directory
- * @return {object}     paths
- */
-
 exports.findPaths = findPaths;
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
@@ -47,12 +22,12 @@ var fs = require('fs'),
     path = require('path');
 
 var Config = (function () {
-    function Config(paths, _x, _x2, mainJsFile) {
-        var server = arguments[1] === undefined ? false : arguments[1];
+    function Config(paths, server, compileJs, mainJsFile) {
+        if (server === undefined) server = false;
 
         var _this = this;
 
-        var compileJs = arguments[2] === undefined ? true : arguments[2];
+        if (compileJs === undefined) compileJs = true;
 
         _classCallCheck(this, Config);
 
@@ -107,6 +82,13 @@ var Config = (function () {
 
 exports.Config = Config;
 
+/**
+ * detectIfSitecoreSite - determines if a given folder is inside of a Sitecore site
+ *
+ * @param  {string} dir
+ * @return {boolean}     is this a Sitecore site?
+ */
+
 function detectIfSitecoreSite(dir) {
     var pathParts = dir.split(path.sep);
 
@@ -119,6 +101,14 @@ function detectIfSitecoreSite(dir) {
     // this is not a Sitecore site
     return false;
 }
+
+/**
+ * findSitecorePaths - determine paths of styles/scripts/other watchable files
+ *                     for a Sitecore site
+ *
+ * @param  {string} dir current directory
+ * @return {object}     paths
+ */
 
 function findSitecorePaths(dir) {
     var pathParts = dir.split(path.sep);
@@ -141,6 +131,14 @@ function findSitecorePaths(dir) {
     }
 }
 
+/**
+ * findPaths - determine paths of styles/scripts/other watchable files
+ *             fot a non-Sitecore site
+ *
+ * @param  {string} dir current directory
+ * @return {object}     paths
+ */
+
 function findPaths(dir) {
     var ignorePaths;
     return regeneratorRuntime.async(function findPaths$(context$1$0) {
@@ -148,7 +146,7 @@ function findPaths(dir) {
             case 0:
                 ignorePaths = ['node_modules', 'bower_components', 'bin', 'dist', 'App_Data', 'App_Start', 'obj'];
                 context$1$0.next = 3;
-                return util.findFiles(path.join(dir), ignorePaths);
+                return regeneratorRuntime.awrap(util.findFiles(path.join(dir), ignorePaths));
 
             case 3:
                 return context$1$0.abrupt('return', context$1$0.sent);

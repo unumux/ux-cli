@@ -49,7 +49,7 @@ function main() {
                 }
 
                 context$1$0.next = 8;
-                return util.installUIFramework();
+                return regeneratorRuntime.awrap(util.installUIFramework());
 
             case 8:
                 newInstall = !fs.existsSync('./ux.json');
@@ -60,7 +60,7 @@ function main() {
                 }
 
                 context$1$0.next = 12;
-                return util.createUXConfig();
+                return regeneratorRuntime.awrap(util.createUXConfig());
 
             case 12:
                 if (!(newInstall || reconfigure || argv.install)) {
@@ -69,7 +69,7 @@ function main() {
                 }
 
                 context$1$0.next = 15;
-                return util.installLibraries();
+                return regeneratorRuntime.awrap(util.installLibraries());
 
             case 15:
                 if (!(argv.packages !== false)) {
@@ -83,7 +83,7 @@ function main() {
                 }
 
                 context$1$0.next = 19;
-                return util.npmInstall();
+                return regeneratorRuntime.awrap(util.npmInstall());
 
             case 19:
                 if (!(argv.bower !== false)) {
@@ -92,7 +92,7 @@ function main() {
                 }
 
                 context$1$0.next = 22;
-                return util.bowerInstall();
+                return regeneratorRuntime.awrap(util.bowerInstall());
 
             case 22:
 

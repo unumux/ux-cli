@@ -78,7 +78,7 @@ function installUIFramework() {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
                 context$1$0.next = 2;
-                return question.yesNo('UI Framework not found. Would you like to install it?');
+                return regeneratorRuntime.awrap(question.yesNo('UI Framework not found. Would you like to install it?'));
 
             case 2:
                 shouldInstall = context$1$0.sent;
@@ -90,7 +90,7 @@ function installUIFramework() {
 
                 console.log('Installing UI Framework...');
                 context$1$0.next = 7;
-                return execCmd('npm install @unumux/ui-framework --save-dev');
+                return regeneratorRuntime.awrap(execCmd('npm install @unumux/ui-framework --save-dev'));
 
             case 7:
             case 'end':
@@ -110,7 +110,7 @@ function generateConfig(paths) {
                 }
 
                 context$1$0.next = 3;
-                return question.list('Where are your SCSS files stored?', paths.scss);
+                return regeneratorRuntime.awrap(question.list('Where are your SCSS files stored?', paths.scss));
 
             case 3:
                 scssPath = context$1$0.sent;
@@ -129,7 +129,7 @@ function generateConfig(paths) {
                 }
 
                 context$1$0.next = 10;
-                return question.list('Where are your JS files stored?', paths.js);
+                return regeneratorRuntime.awrap(question.list('Where are your JS files stored?', paths.js));
 
             case 10:
                 jsPath = context$1$0.sent;
@@ -158,14 +158,14 @@ function generateConfig(paths) {
 
             case 19:
                 context$1$0.next = 21;
-                return question.checkbox('What other files/folders should trigger a refresh in the browser when files are changed?', paths.other);
+                return regeneratorRuntime.awrap(question.checkbox('What other files/folders should trigger a refresh in the browser when files are changed?', paths.other));
 
             case 21:
                 watchPaths = context$1$0.sent;
 
             case 22:
                 context$1$0.next = 24;
-                return question.yesNo('Should Javascript files be processed with Browserify?');
+                return regeneratorRuntime.awrap(question.yesNo('Should Javascript files be processed with Browserify?'));
 
             case 24:
                 compileJs = context$1$0.sent;
@@ -177,7 +177,7 @@ function generateConfig(paths) {
 
                 jsFiles = glob.sync(path.join(jsPath, '**/*.js'), { ignore: ['**/*.min.js'] });
                 context$1$0.next = 29;
-                return question.list('Which JS file is your main (entry) file?', jsFiles);
+                return regeneratorRuntime.awrap(question.list('Which JS file is your main (entry) file?', jsFiles));
 
             case 29:
                 mainJsFile = context$1$0.sent;
@@ -189,7 +189,7 @@ function generateConfig(paths) {
 
             case 33:
                 context$1$0.next = 35;
-                return question.yesNo('Is this a static site?');
+                return regeneratorRuntime.awrap(question.yesNo('Is this a static site?'));
 
             case 35:
                 staticSite = context$1$0.sent;
@@ -210,7 +210,7 @@ function createUXConfig() {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
                 context$1$0.next = 2;
-                return question.yesNo('ux.json not found. Would you like to create one?');
+                return regeneratorRuntime.awrap(question.yesNo('ux.json not found. Would you like to create one?'));
 
             case 2:
                 shouldCreate = context$1$0.sent;
@@ -236,12 +236,12 @@ function createUXConfig() {
 
             case 11:
                 context$1$0.next = 13;
-                return UXConfig.findPaths(process.cwd());
+                return regeneratorRuntime.awrap(UXConfig.findPaths(process.cwd()));
 
             case 13:
                 paths = context$1$0.sent;
                 context$1$0.next = 16;
-                return generateConfig(paths);
+                return regeneratorRuntime.awrap(generateConfig(paths));
 
             case 16:
             case 'end':
@@ -327,7 +327,7 @@ function findFiles(globPath, ignorePaths) {
                 }
 
                 context$1$0.next = 15;
-                return question.yesNo('No styles, scripts, or markup were found. Would you like to scaffold a basic site?');
+                return regeneratorRuntime.awrap(question.yesNo('No styles, scripts, or markup were found. Would you like to scaffold a basic site?'));
 
             case 15:
                 scaffoldFullSite = context$1$0.sent;
@@ -350,7 +350,7 @@ function findFiles(globPath, ignorePaths) {
                 }
 
                 context$1$0.next = 22;
-                return question.yesNo('No styles were found. Would you like to create a site.scss?');
+                return regeneratorRuntime.awrap(question.yesNo('No styles were found. Would you like to create a site.scss?'));
 
             case 22:
                 scaffoldStyles = context$1$0.sent;
@@ -366,7 +366,7 @@ function findFiles(globPath, ignorePaths) {
                 }
 
                 context$1$0.next = 27;
-                return question.yesNo('No scripts were found. Would you like to create a site.js?');
+                return regeneratorRuntime.awrap(question.yesNo('No scripts were found. Would you like to create a site.js?'));
 
             case 27:
                 scaffoldScripts = context$1$0.sent;
@@ -382,7 +382,7 @@ function findFiles(globPath, ignorePaths) {
                 }
 
                 context$1$0.next = 32;
-                return question.yesNo('No markup was found. Would you like to create an index.html?');
+                return regeneratorRuntime.awrap(question.yesNo('No markup was found. Would you like to create an index.html?'));
 
             case 32:
                 scaffoldMarkup = context$1$0.sent;
@@ -407,7 +407,7 @@ function installLibraries() {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
                 context$1$0.next = 2;
-                return question.checkbox('Would you like to install any additional libraries?', [{ name: 'Colonial Life Framework & Branding', value: 'unumux/colonial-branding' }, { name: 'Unum Framework & Branding', value: 'unumux/unum-branding' }, { name: 'jQuery', value: 'jquery' }, { name: 'Knockout', value: 'knockout' }, { name: 'Angular', value: 'angular' }, { name: 'ReactJS', value: 'react' }]);
+                return regeneratorRuntime.awrap(question.checkbox('Would you like to install any additional libraries?', [{ name: 'Colonial Life Framework & Branding', value: 'unumux/colonial-branding' }, { name: 'Unum Framework & Branding', value: 'unumux/unum-branding' }, { name: 'jQuery', value: 'jquery' }, { name: 'Knockout', value: 'knockout' }, { name: 'Angular', value: 'angular' }, { name: 'ReactJS', value: 'react' }]));
 
             case 2:
                 additionalLibraries = context$1$0.sent;
@@ -418,7 +418,7 @@ function installLibraries() {
                 }
 
                 context$1$0.next = 6;
-                return execCmd('bower install --save ' + additionalLibraries.join(' '));
+                return regeneratorRuntime.awrap(execCmd('bower install --save ' + additionalLibraries.join(' ')));
 
             case 6:
             case 'end':
