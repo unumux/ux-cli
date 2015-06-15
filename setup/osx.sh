@@ -73,6 +73,6 @@ if ! checkCmd bower ; then
   installNpm bower
 fi
 
-installNpm @unumux/ux
+installNpm @unumux/ux-cli
 
 echo "Finished! You may need to close this window and open a new terminal window before you can use the tool"
