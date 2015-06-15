@@ -2,9 +2,30 @@
 
 This tool is used to run the UX Team's build tools. Additionally, it can scaffold out a basic site structure if one does not already exist.
 
-## Installation
+## Automated Installation
 
-Node v0.10.x or v0.12.x are required. Node can be installed from: http://nodejs.org.
+A one-time setup can be run to automatically get the requirements and to install the ux-cli tool. There are seperate commands to run on OS X and Windows.
+
+
+### OS X
+
+Running the command below in a terminal will install Nvm, Node, and ux-cli (if needed). You may need to run this as `sudo` user and enter your password.
+
+```
+bash -c "$(curl https://7c42ce73f8853826cd1e3a5d47002c7ff693164f:x-oauth-basic@raw.githubusercontent.com/unumux/ux-cli/master/setup/osx.sh)"
+```
+
+### Windows
+
+Running the command below at your command prompt will install Git, Node, Yeoman, and Grunt (if needed) and then install the generator as a global package
+
+```
+@powershell -NoProfile -ExecutionPolicy unrestricted -Command "$wc=new-object net.webclient;$wc.Headers.Add('Authorization', 'Basic N2M0MmNlNzNmODg1MzgyNmNkMWUzYTVkNDcwMDJjN2ZmNjkzMTY0Zjp4LW9hdXRoLWJhc2ljCg==');$wc.DownloadString('https://7c42ce73f8853826cd1e3a5d47002c7ff693164f:x-oauth-basic@raw.githubusercontent.com/unumux/ux-cli/master/setup/win.ps1') | iex"
+```
+
+## Manual Installation
+
+Node v0.12.x is required. Node can be installed from: http://nodejs.org.
 
 UX-CLI can be installed by opening your terminal (Command line in Windows) and running:
 
