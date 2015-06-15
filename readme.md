@@ -100,3 +100,7 @@ Same as `--no-packages`, but only disables npm installation.
 ### ux [taskname]
 
 UX can be passed the name of a gulp task, and it will pass it to gulp. For example, `ux styles` would run a single SASS compilation.
+
+### ux --install
+
+During initial project setup, UX asks for a list of packages to install (such as colonial-branding and jQuery). This process can be run at a later time by using the --install switch.
