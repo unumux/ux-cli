@@ -59,7 +59,21 @@ If using Browserify, a "main" JS file is required. This file is the one that wil
 
 If this is a Sitecore or ASP.NET site, you should answer no to this. Otherwise, answer yes.
 
+### Would you like to install any additional libraries? (Press <space> to select)
 
+Choose additional libraries to install. These are not automatically inserted into your styles, markup, or scripts. You will need to @import them for stylesheets. For example, to use colonial-branding in your SCSS files, type:
+
+```
+@import "colonial-branding/main";
+```
+
+If you are using browserify, using JS files is just as easy. For example, to use jQuery, just type:
+
+```
+var $ = require "jquery";
+```
+
+If you are not using Browserify, or if you have any files that aren't SCSS/JS, then they will need to be copied from Bower to a folder in your project and then included using the appropriate tag inside of your markup.
 
 ## Options
 

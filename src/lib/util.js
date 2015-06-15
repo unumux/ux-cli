@@ -229,7 +229,6 @@ export async function findFiles(globPath, ignorePaths) {
 export async function installLibraries() {
     var additionalLibraries = await question.checkbox('Would you like to install any additional libraries?', [
         { name: 'Colonial Life Framework & Branding', value: 'unumux/colonial-branding' },
-        { name: 'Unum Framework & Branding', value: 'unumux/unum-branding' },
         { name: 'jQuery', value: 'jquery' },
         { name: 'Knockout', value: 'knockout' },
         { name: 'Angular', value: 'angular' },
