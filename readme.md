@@ -100,6 +100,10 @@ If you are not using Browserify, or if you have any files that aren't SCSS/JS, t
 
 The tool supports several options
 
+### ux --login
+
+Setup global login information. 
+
 ### ux --reconfigure
 
 This option allows you to recreate the ux.json configuration file. This is not needed if a ux.json file does not already exist
