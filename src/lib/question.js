@@ -18,6 +18,22 @@ export function yesNo(question, defaultAns=true) {
     });
 }
 
+export function text(question, defaultAns=null) {
+    return inquirerPromisify({
+        type: 'input',
+        message: question,
+        default: defaultAns
+    });
+}
+
+export function password(question, defaultAns=null) {
+    return inquirerPromisify({
+        type: 'password',
+        message: question,
+        default: defaultAns
+    });
+}
+
 export function list(question, choices, defaultAns=0) {
     return inquirerPromisify({
         type: 'list',

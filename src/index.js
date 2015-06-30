@@ -13,6 +13,10 @@ import createUXConfig from './lib/ux-config.js';
 
 async function main() {
     try {
+        // check for login param
+        if(argv.login) {
+            await util.updateLogin();
+        }
 
         // aliases for reconfigure switch
         var reconfigure = argv.reconfigure || argv.reconfig || argv.configure || argv.config;
@@ -22,8 +26,7 @@ async function main() {
             util.createPackageJson();
         }
 
-
-        // if package.json does not exist, create it
+        // if bower.json does not exist, create it
         if(!fs.existsSync('./bower.json')) {
             util.createBowerJson();
         }

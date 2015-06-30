@@ -29,6 +29,16 @@ function main() {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
                 context$1$0.prev = 0;
+
+                if (!argv.login) {
+                    context$1$0.next = 4;
+                    break;
+                }
+
+                context$1$0.next = 4;
+                return regeneratorRuntime.awrap(util.updateLogin());
+
+            case 4:
                 reconfigure = argv.reconfigure || argv.reconfig || argv.configure || argv.config;
 
                 // if package.json does not exist, create it
@@ -36,7 +46,7 @@ function main() {
                     util.createPackageJson();
                 }
 
-                // if package.json does not exist, create it
+                // if bower.json does not exist, create it
                 if (!fs.existsSync('./bower.json')) {
                     util.createBowerJson();
                 }
@@ -44,77 +54,79 @@ function main() {
                 packages = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 
                 if (!(!packages.hasOwnProperty('devDependencies') || !packages.devDependencies.hasOwnProperty('@unumux/ui-framework'))) {
-                    context$1$0.next = 8;
+                    context$1$0.next = 11;
                     break;
                 }
 
-                context$1$0.next = 8;
+                context$1$0.next = 11;
                 return regeneratorRuntime.awrap(util.installUIFramework());
 
-            case 8:
+            case 11:
                 newInstall = !fs.existsSync('./ux.json');
 
                 if (!(newInstall || reconfigure)) {
-                    context$1$0.next = 12;
-                    break;
-                }
-
-                context$1$0.next = 12;
-                return regeneratorRuntime.awrap(util.createUXConfig());
-
-            case 12:
-                if (!(newInstall || reconfigure || argv.install)) {
                     context$1$0.next = 15;
                     break;
                 }
 
                 context$1$0.next = 15;
-                return regeneratorRuntime.awrap(util.installLibraries());
+                return regeneratorRuntime.awrap(util.createUXConfig());
 
             case 15:
+                if (!(newInstall || reconfigure || argv.install)) {
+                    context$1$0.next = 18;
+                    break;
+                }
+
+                context$1$0.next = 18;
+                return regeneratorRuntime.awrap(util.installLibraries());
+
+            case 18:
                 if (!(argv.packages !== false)) {
-                    context$1$0.next = 22;
+                    context$1$0.next = 25;
                     break;
                 }
 
                 if (!(argv.npm !== false)) {
-                    context$1$0.next = 19;
-                    break;
-                }
-
-                context$1$0.next = 19;
-                return regeneratorRuntime.awrap(util.npmInstall());
-
-            case 19:
-                if (!(argv.bower !== false)) {
                     context$1$0.next = 22;
                     break;
                 }
 
                 context$1$0.next = 22;
-                return regeneratorRuntime.awrap(util.bowerInstall());
+                return regeneratorRuntime.awrap(util.npmInstall());
 
             case 22:
+                if (!(argv.bower !== false)) {
+                    context$1$0.next = 25;
+                    break;
+                }
+
+                context$1$0.next = 25;
+                return regeneratorRuntime.awrap(util.bowerInstall());
+
+            case 25:
 
                 util.runGulp(argv._);
 
-                context$1$0.next = 28;
+                context$1$0.next = 31;
                 break;
 
-            case 25:
-                context$1$0.prev = 25;
+            case 28:
+                context$1$0.prev = 28;
                 context$1$0.t0 = context$1$0['catch'](0);
 
                 console.log(context$1$0.t0);
 
-            case 28:
+            case 31:
             case 'end':
                 return context$1$0.stop();
         }
-    }, null, this, [[0, 25]]);
+    }, null, this, [[0, 28]]);
 }
 
 main();
+
+// check for login param
 
 // aliases for reconfigure switch
 // load package.json and check if ui-framework is installed

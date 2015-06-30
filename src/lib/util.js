@@ -11,6 +11,9 @@ import * as UXConfig from './ux-config.js';
 import * as question from './question.js';
 import * as scaffold from './scaffold.js';
 
+function getUserHome() {
+  return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+}
 
 export function execCmd(cmd) {
     return new Promise((resolve, reject) => {
@@ -89,7 +92,12 @@ async function generateConfig(paths) {
 
 
     var staticSite = await question.yesNo('Is this a static site?');
-    var config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, staticSite, compileJs, mainJsFile);
+
+    if(!staticSite) {
+        var proxy = await question.text('What is the local url of the site you are working on? (ex: http://my.localhost.com/producers)');
+    }
+
+    var config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, staticSite, compileJs, mainJsFile, proxy);
 
     config.write('./ux.json');
 }
@@ -102,7 +110,8 @@ export async function createUXConfig() {
 
         if(isSitecoreSite) {
             let paths = UXConfig.findSitecorePaths(process.cwd());
-            let config = new UXConfig.Config(paths, false, false);
+            let proxy = await question.text('What is the local url of the site you are working on? (ex: http://my.localhost.com/producers)');
+            let config = new UXConfig.Config(paths, false, false, '', proxy);
             config.write('./ux.json');
         } else {
             let paths = await UXConfig.findPaths(process.cwd());
@@ -238,6 +247,26 @@ export async function installLibraries() {
     if(additionalLibraries.length > 0) {
         await execCmd(`bower install --save ${additionalLibraries.join(' ')}`);
     }
+}
 
+export async function updateLogin() {
+    var username = await question.text('Username:', process.env['USER']);
+    var password = await question.password('Password:', 'colonial');
+
+    var home = getUserHome();
+    var configPath = path.join(home, '.ux-global.json');
+
+    if(fs.existsSync(configPath)) {
+        var config = require(configPath);
+    } else {
+        var config = {};
+    }
+
+    config.login = {
+        username: username,
+        password: password
+    }
+
+    fs.writeFileSync(configPath, JSON.stringify(config, null, 4));
 
 }

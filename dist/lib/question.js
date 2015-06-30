@@ -4,6 +4,8 @@ Object.defineProperty(exports, '__esModule', {
     value: true
 });
 exports.yesNo = yesNo;
+exports.text = text;
+exports.password = password;
 exports.list = list;
 exports.checkbox = checkbox;
 var inquirer = require('inquirer');
@@ -22,6 +24,26 @@ function yesNo(question) {
 
     return inquirerPromisify({
         type: 'confirm',
+        message: question,
+        'default': defaultAns
+    });
+}
+
+function text(question) {
+    var defaultAns = arguments[1] === undefined ? null : arguments[1];
+
+    return inquirerPromisify({
+        type: 'input',
+        message: question,
+        'default': defaultAns
+    });
+}
+
+function password(question) {
+    var defaultAns = arguments[1] === undefined ? null : arguments[1];
+
+    return inquirerPromisify({
+        type: 'password',
         message: question,
         'default': defaultAns
     });

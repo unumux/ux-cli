@@ -13,6 +13,7 @@ exports.createUXConfig = createUXConfig;
 exports.runGulp = runGulp;
 exports.findFiles = findFiles;
 exports.installLibraries = installLibraries;
+exports.updateLogin = updateLogin;
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
@@ -36,6 +37,10 @@ var exec = require('child_process').exec,
     path = require('path'),
     glob = require('glob'),
     _ = require('lodash');
+
+function getUserHome() {
+    return process.env[process.platform == 'win32' ? 'USERPROFILE' : 'HOME'];
+}
 
 function execCmd(cmd) {
     return new Promise(function (resolve, reject) {
@@ -100,7 +105,7 @@ function installUIFramework() {
 }
 
 function generateConfig(paths) {
-    var scssPath, jsPath, watchPaths, compileJs, jsFiles, mainJsFile, staticSite, config;
+    var scssPath, jsPath, watchPaths, compileJs, jsFiles, mainJsFile, staticSite, proxy, config;
     return regeneratorRuntime.async(function generateConfig$(context$1$0) {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
@@ -193,11 +198,24 @@ function generateConfig(paths) {
 
             case 35:
                 staticSite = context$1$0.sent;
-                config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, staticSite, compileJs, mainJsFile);
+
+                if (staticSite) {
+                    context$1$0.next = 40;
+                    break;
+                }
+
+                context$1$0.next = 39;
+                return regeneratorRuntime.awrap(question.text('What is the local url of the site you are working on? (ex: http://my.localhost.com/producers)'));
+
+            case 39:
+                proxy = context$1$0.sent;
+
+            case 40:
+                config = new UXConfig.Config({ scss: scssPath, js: jsPath, watch: watchPaths }, staticSite, compileJs, mainJsFile, proxy);
 
                 config.write('./ux.json');
 
-            case 38:
+            case 42:
             case 'end':
                 return context$1$0.stop();
         }
@@ -205,7 +223,7 @@ function generateConfig(paths) {
 }
 
 function createUXConfig() {
-    var shouldCreate, isSitecoreSite, paths, config;
+    var shouldCreate, isSitecoreSite, paths, proxy, config;
     return regeneratorRuntime.async(function createUXConfig$(context$1$0) {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
@@ -216,34 +234,39 @@ function createUXConfig() {
                 shouldCreate = context$1$0.sent;
 
                 if (!shouldCreate) {
-                    context$1$0.next = 16;
+                    context$1$0.next = 19;
                     break;
                 }
 
                 isSitecoreSite = UXConfig.detectIfSitecoreSite(process.cwd());
 
                 if (!isSitecoreSite) {
-                    context$1$0.next = 11;
+                    context$1$0.next = 14;
                     break;
                 }
 
                 paths = UXConfig.findSitecorePaths(process.cwd());
-                config = new UXConfig.Config(paths, false, false);
+                context$1$0.next = 9;
+                return regeneratorRuntime.awrap(question.text('What is the local url of the site you are working on? (ex: http://my.localhost.com/producers)'));
+
+            case 9:
+                proxy = context$1$0.sent;
+                config = new UXConfig.Config(paths, false, false, '', proxy);
 
                 config.write('./ux.json');
-                context$1$0.next = 16;
+                context$1$0.next = 19;
                 break;
 
-            case 11:
-                context$1$0.next = 13;
+            case 14:
+                context$1$0.next = 16;
                 return regeneratorRuntime.awrap(UXConfig.findPaths(process.cwd()));
 
-            case 13:
+            case 16:
                 paths = context$1$0.sent;
-                context$1$0.next = 16;
+                context$1$0.next = 19;
                 return regeneratorRuntime.awrap(generateConfig(paths));
 
-            case 16:
+            case 19:
             case 'end':
                 return context$1$0.stop();
         }
@@ -407,7 +430,7 @@ function installLibraries() {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
                 context$1$0.next = 2;
-                return regeneratorRuntime.awrap(question.checkbox('Would you like to install any additional libraries?', [{ name: 'Colonial Life Framework & Branding', value: 'unumux/colonial-branding' }, { name: 'Unum Framework & Branding', value: 'unumux/unum-branding' }, { name: 'jQuery', value: 'jquery' }, { name: 'Knockout', value: 'knockout' }, { name: 'Angular', value: 'angular' }, { name: 'ReactJS', value: 'react' }]));
+                return regeneratorRuntime.awrap(question.checkbox('Would you like to install any additional libraries?', [{ name: 'Colonial Life Framework & Branding', value: 'unumux/colonial-branding' }, { name: 'jQuery', value: 'jquery' }, { name: 'Knockout', value: 'knockout' }, { name: 'Angular', value: 'angular' }, { name: 'ReactJS', value: 'react' }]));
 
             case 2:
                 additionalLibraries = context$1$0.sent;
@@ -421,6 +444,44 @@ function installLibraries() {
                 return regeneratorRuntime.awrap(execCmd('bower install --save ' + additionalLibraries.join(' ')));
 
             case 6:
+            case 'end':
+                return context$1$0.stop();
+        }
+    }, null, this);
+}
+
+function updateLogin() {
+    var username, password, home, configPath, config;
+    return regeneratorRuntime.async(function updateLogin$(context$1$0) {
+        while (1) switch (context$1$0.prev = context$1$0.next) {
+            case 0:
+                context$1$0.next = 2;
+                return regeneratorRuntime.awrap(question.text('Username:', process.env['USER']));
+
+            case 2:
+                username = context$1$0.sent;
+                context$1$0.next = 5;
+                return regeneratorRuntime.awrap(question.password('Password:', 'colonial'));
+
+            case 5:
+                password = context$1$0.sent;
+                home = getUserHome();
+                configPath = path.join(home, '.ux-global.json');
+
+                if (fs.existsSync(configPath)) {
+                    config = require(configPath);
+                } else {
+                    config = {};
+                }
+
+                config.login = {
+                    username: username,
+                    password: password
+                };
+
+                fs.writeFileSync(configPath, JSON.stringify(config, null, 4));
+
+            case 11:
             case 'end':
                 return context$1$0.stop();
         }

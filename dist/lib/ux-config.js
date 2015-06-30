@@ -24,10 +24,11 @@ var fs = require('fs'),
 var Config = (function () {
     function Config(paths, server, compileJs, mainJsFile) {
         if (server === undefined) server = false;
+        if (compileJs === undefined) compileJs = true;
 
         var _this = this;
 
-        if (compileJs === undefined) compileJs = true;
+        var proxy = arguments[4] === undefined ? false : arguments[4];
 
         _classCallCheck(this, Config);
 
@@ -46,6 +47,7 @@ var Config = (function () {
 
         this.server = server;
         this.compileJs = compileJs;
+        this.proxy = proxy;
 
         // if we aren't compiling JS, set it to be a watched folder as well
         if (this.compileJs && mainJsFile) {
