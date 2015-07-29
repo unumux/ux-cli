@@ -59,7 +59,7 @@ Function Run-Main {
 
   git config --global url."https://".insteadOf git://
 
-  npm install -g @unumux/ux-cli bower
+  npm install -g `@unumux/ux-cli bower
 }
 
 
