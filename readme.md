@@ -12,7 +12,7 @@ A one-time setup can be run to automatically get the requirements and to install
 Running the command below in a terminal will install Nvm, Node, and ux-cli (if needed). You may need to run this as `sudo` user and enter your password.
 
 ```
-bash -c "$(curl https://7c42ce73f8853826cd1e3a5d47002c7ff693164f:x-oauth-basic@raw.githubusercontent.com/unumux/ux-cli/master/setup/osx.sh)"
+bash -c "$(curl https://raw.githubusercontent.com/unumux/ux-cli/master/setup/osx.sh)"
 ```
 
 ### Windows
@@ -20,7 +20,7 @@ bash -c "$(curl https://7c42ce73f8853826cd1e3a5d47002c7ff693164f:x-oauth-basic@r
 Running the command below at your command prompt will install Git, Node, Yeoman, and Grunt (if needed) and then install the generator as a global package
 
 ```
-@powershell -NoProfile -ExecutionPolicy unrestricted -Command "$wc=new-object net.webclient;$wc.Headers.Add('Authorization', 'Basic N2M0MmNlNzNmODg1MzgyNmNkMWUzYTVkNDcwMDJjN2ZmNjkzMTY0Zjp4LW9hdXRoLWJhc2ljCg==');$wc.DownloadString('https://7c42ce73f8853826cd1e3a5d47002c7ff693164f:x-oauth-basic@raw.githubusercontent.com/unumux/ux-cli/master/setup/win.ps1') | iex"
+@powershell -NoProfile -ExecutionPolicy unrestricted -Command "$wc=new-object net.webclient;$wc.DownloadString('raw.githubusercontent.com/unumux/ux-cli/master/setup/win.ps1') | iex"
 ```
 
 ## Manual Installation
@@ -102,7 +102,7 @@ The tool supports several options
 
 ### ux --login
 
-Setup global login information. 
+Setup global login information.
 
 ### ux --reconfigure
 
