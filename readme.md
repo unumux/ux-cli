@@ -20,7 +20,7 @@ bash -c "$(curl https://raw.githubusercontent.com/unumux/ux-cli/master/setup/osx
 Running the command below at your command prompt will install Git, Node, Yeoman, and Grunt (if needed) and then install the generator as a global package
 
 ```
-@powershell -NoProfile -ExecutionPolicy unrestricted -Command "$wc=new-object net.webclient;$wc.DownloadString('raw.githubusercontent.com/unumux/ux-cli/master/setup/win.ps1') | iex"
+@powershell -NoProfile -ExecutionPolicy unrestricted -Command "$wc=new-object net.webclient;$wc.DownloadString('http://raw.githubusercontent.com/unumux/ux-cli/master/setup/win.ps1') | iex"
 ```
 
 ## Manual Installation
