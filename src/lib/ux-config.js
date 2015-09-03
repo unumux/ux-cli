@@ -5,18 +5,26 @@ import * as util from "./util.js";
 
 export class Config {
     constructor(paths, server=false, compileJs=true, mainJsFile, proxy=false) {
-        this.scss = {
-            src: this.appendGlobs(paths.scss, 'scss'),
-            dest: paths.scss
-        }
-        this.js = {
-            src: this.appendGlobs(paths.js, 'js'),
-            dest: paths.js
+
+        if(paths.scss) {
+            this.scss = {
+                src: this.appendGlobs(paths.scss, 'scss'),
+                dest: paths.scss
+            }
         }
 
-        this.watch = paths.watch.map((folder) => {
-            return this.appendGlobs(folder);
-        });
+        if(paths.js) {
+            this.js = {
+                src: this.appendGlobs(paths.js, 'js'),
+                dest: paths.js
+            }
+        }
+
+        if(paths.watch) {
+            this.watch = paths.watch.map((folder) => {
+                return this.appendGlobs(folder);
+            });
+        }
 
         this.server = server;
         this.compileJs = compileJs;
@@ -25,7 +33,7 @@ export class Config {
         // if we aren't compiling JS, set it to be a watched folder as well
         if(this.compileJs && mainJsFile) {
             this.js.main = mainJsFile;
-        } else {
+        } else if(this.js && this.js.src) {
             this.watch.push(this.js.src);
         }
 

@@ -32,18 +32,25 @@ var Config = (function () {
 
         _classCallCheck(this, Config);
 
-        this.scss = {
-            src: this.appendGlobs(paths.scss, 'scss'),
-            dest: paths.scss
-        };
-        this.js = {
-            src: this.appendGlobs(paths.js, 'js'),
-            dest: paths.js
-        };
+        if (paths.scss) {
+            this.scss = {
+                src: this.appendGlobs(paths.scss, 'scss'),
+                dest: paths.scss
+            };
+        }
 
-        this.watch = paths.watch.map(function (folder) {
-            return _this.appendGlobs(folder);
-        });
+        if (paths.js) {
+            this.js = {
+                src: this.appendGlobs(paths.js, 'js'),
+                dest: paths.js
+            };
+        }
+
+        if (paths.watch) {
+            this.watch = paths.watch.map(function (folder) {
+                return _this.appendGlobs(folder);
+            });
+        }
 
         this.server = server;
         this.compileJs = compileJs;
@@ -52,7 +59,7 @@ var Config = (function () {
         // if we aren't compiling JS, set it to be a watched folder as well
         if (this.compileJs && mainJsFile) {
             this.js.main = mainJsFile;
-        } else {
+        } else if (this.js && this.js.src) {
             this.watch.push(this.js.src);
         }
     }
