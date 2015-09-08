@@ -1,4 +1,3 @@
-require('babel-core/register');
 
 var exec = require('child_process').exec,
     spawn = require('child_process').spawn,

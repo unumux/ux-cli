@@ -1,6 +1,3 @@
-#!/usr/bin/env node
-require('babel-core/register');
-
 var fs = require('fs'),
     path = require('path'),
     argv = require('minimist')(process.argv.slice(2)),
@@ -13,7 +10,7 @@ import * as debug from './lib/debug.js';
 import createUXConfig from './lib/ux-config.js';
 
 
-async function main() {
+export default async function main() {
     try {
 
         // enabled debug mode if debug or verbose arg set
@@ -91,5 +88,3 @@ async function main() {
         debug.error(e);
     }
 }
-
-main();
