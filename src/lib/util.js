@@ -7,6 +7,8 @@ var exec = require('child_process').exec,
     glob = require('glob'),
     _ = require('lodash');
 
+var debug = require('./debug.js');
+
 import * as UXConfig from './ux-config.js';
 import * as question from './question.js';
 import * as scaffold from './scaffold.js';
@@ -16,28 +18,43 @@ function getUserHome() {
 }
 
 export function execCmd(cmd) {
+    debug.log(`Executing command: ${cmd}`);
     return new Promise((resolve, reject) => {
-        exec(cmd, function() {
+        var cmdParts = cmd.split(' ');
+        if(debug.enabled()) {
+            var stdio = [0, process.stdout, process.stderr];
+        } else {
+            var stdio = 'ignore';
+        }
+        spawn(cmdParts[0], cmdParts.slice(1), {
+            stdio: stdio
+        }).on('close', function() {
+            debug.log(`Command completed successfully: ${cmd}`);
             resolve();
         });
     });
 }
 
 export function createPackageJson() {
+    debug.log(`Creating package.json...`);
+
     let packageJson = {
         private: true
     }
 
     fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 4));
+    debug.log(`package.json created`)
 }
 
 export function createBowerJson() {
+    debug.log(`Creating bower.json...`);
     let bowerJson = {
         private: true,
         name: path.basename(process.cwd())
     }
 
     fs.writeFileSync('./bower.json', JSON.stringify(bowerJson, null, 4));
+    debug.log(`bower.json created`)
 }
 
 export function bowerInstall() {
@@ -55,6 +72,7 @@ export async function installUIFramework() {
 
     if(shouldInstall) {
         console.log('Installing UI Framework...')
+        debug.log('Starting UI Framework install...');
         await execCmd('npm install @unumux/ui-framework --save-dev');
     }
 }
@@ -124,7 +142,6 @@ export async function createUXConfig() {
 
 function findGulpPath() {
     let gulpCmd = (process.platform === "win32" ? "gulp.cmd" : "gulp");
-
     let searchPaths = [
         ['node_modules', '@unumux', 'ui-framework', 'node_modules', '.bin', gulpCmd],
         ['node_modules', '.bin', gulpCmd]
@@ -136,6 +153,7 @@ function findGulpPath() {
             gulpCmd = searchPath;
         }
     });
+    debug.log(`Gulp path: ${gulpCmd}`);
 
     return gulpCmd;
 }

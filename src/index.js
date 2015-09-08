@@ -3,19 +3,34 @@ require('babel-core/register');
 
 var fs = require('fs'),
     path = require('path'),
-    argv = require('minimist')(process.argv.slice(2));
+    argv = require('minimist')(process.argv.slice(2)),
+    colors = require('colors');
 
 import * as question from "./lib/question.js";
 
 import * as util from './lib/util.js';
+import * as debug from './lib/debug.js';
 import createUXConfig from './lib/ux-config.js';
 
 
 async function main() {
     try {
+
+        // enabled debug mode if debug or verbose arg set
+        if(argv.debug || argv.verbose) {
+            debug.enable();
+        }
+
+        // why not
+        if(argv.upupdowndownleftrightleftrightbastart) {
+            console.log('Why did you think this would work?'.zalgo.rainbow);
+        }
+
         // check for login param
         if(argv.login) {
+            debug.log("Updating login");
             await util.updateLogin();
+            debug.log("Login enabled");
         }
 
         // aliases for reconfigure switch
@@ -32,21 +47,27 @@ async function main() {
         }
 
         // load package.json and check if ui-framework is installed
+        debug.log("Loading package.json to check for ui-framework...");
         var packages = JSON.parse(fs.readFileSync('./package.json','utf8'));
 
         if(!packages.hasOwnProperty('devDependencies') || !packages.devDependencies.hasOwnProperty('@unumux/ui-framework')) {
+            debug.log("package.json doesn't have key for ui-framework. Prompting to install...");
+            debug.json(packages);
             await util.installUIFramework();
         }
 
+        debug.log('Checking for ux.json...');
         var newInstall = !fs.existsSync('./ux.json');
 
         // create config file, if it does not exist or if reconfigure switch is passed
         if(newInstall || reconfigure) {
+            debug.log('ux.json not found. Prompting to create one...');
             await util.createUXConfig();
         }
 
         // install additional libraries, if first setup, if reconfigure switch is passed, or if --install is passed
         if(newInstall || reconfigure || argv.install) {
+            debug.log('Prompting to install libraries...');
             await util.installLibraries();
         }
 
@@ -66,7 +87,8 @@ async function main() {
         util.runGulp(argv._);
 
     } catch(e) {
-        console.log(e);
+        debug.error("There was an unexpected error. Details: " );
+        debug.error(e);
     }
 }
 

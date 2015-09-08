@@ -38,33 +38,50 @@ var exec = require('child_process').exec,
     glob = require('glob'),
     _ = require('lodash');
 
+var debug = require('./debug.js');
+
 function getUserHome() {
     return process.env[process.platform == 'win32' ? 'USERPROFILE' : 'HOME'];
 }
 
 function execCmd(cmd) {
+    debug.log('Executing command: ' + cmd);
     return new Promise(function (resolve, reject) {
-        exec(cmd, function () {
+        var cmdParts = cmd.split(' ');
+        if (debug.enabled()) {
+            var stdio = [0, process.stdout, process.stderr];
+        } else {
+            var stdio = 'ignore';
+        }
+        spawn(cmdParts[0], cmdParts.slice(1), {
+            stdio: stdio
+        }).on('close', function () {
+            debug.log('Command completed successfully: ' + cmd);
             resolve();
         });
     });
 }
 
 function createPackageJson() {
+    debug.log('Creating package.json...');
+
     var packageJson = {
         'private': true
     };
 
     fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 4));
+    debug.log('package.json created');
 }
 
 function createBowerJson() {
+    debug.log('Creating bower.json...');
     var bowerJson = {
         'private': true,
         name: path.basename(process.cwd())
     };
 
     fs.writeFileSync('./bower.json', JSON.stringify(bowerJson, null, 4));
+    debug.log('bower.json created');
 }
 
 function bowerInstall() {
@@ -89,15 +106,16 @@ function installUIFramework() {
                 shouldInstall = context$1$0.sent;
 
                 if (!shouldInstall) {
-                    context$1$0.next = 7;
+                    context$1$0.next = 8;
                     break;
                 }
 
                 console.log('Installing UI Framework...');
-                context$1$0.next = 7;
+                debug.log('Starting UI Framework install...');
+                context$1$0.next = 8;
                 return regeneratorRuntime.awrap(execCmd('npm install @unumux/ui-framework --save-dev'));
 
-            case 7:
+            case 8:
             case 'end':
                 return context$1$0.stop();
         }
@@ -275,7 +293,6 @@ function createUXConfig() {
 
 function findGulpPath() {
     var gulpCmd = process.platform === 'win32' ? 'gulp.cmd' : 'gulp';
-
     var searchPaths = [['node_modules', '@unumux', 'ui-framework', 'node_modules', '.bin', gulpCmd], ['node_modules', '.bin', gulpCmd]];
 
     searchPaths.forEach(function (searchPathTmp) {
@@ -284,6 +301,7 @@ function findGulpPath() {
             gulpCmd = searchPath;
         }
     });
+    debug.log('Gulp path: ' + gulpCmd);
 
     return gulpCmd;
 }
