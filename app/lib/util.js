@@ -12,6 +12,8 @@ import * as UXConfig from './ux-config.js';
 import * as question from './question.js';
 import * as scaffold from './scaffold.js';
 
+var isWin = process.platform === 'win32';
+
 function getUserHome() {
   return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
 }
@@ -19,13 +21,21 @@ function getUserHome() {
 export function execCmd(cmd) {
     debug.log(`Executing command: ${cmd}`);
     return new Promise((resolve, reject) => {
-        var cmdParts = cmd.split(' ');
+
+        if(isWin) {
+            var shell = "cmd.exe";
+            var args = ['/c', cmd];
+        } else {
+            var shell = "sh";
+            var args = ['-c', cmd];
+        }
+
         if(debug.enabled()) {
             var stdio = [0, process.stdout, process.stderr];
         } else {
             var stdio = 'ignore';
         }
-        spawn(cmdParts[0], cmdParts.slice(1), {
+        spawn(shell, args, {
             stdio: stdio
         }).on('close', function() {
             debug.log(`Command completed successfully: ${cmd}`);
