@@ -31,7 +31,9 @@ module.exports = {
         log(msg.red);
     },
     json: function(obj) {
-        console.log(obj);
+        if(enabled) {
+            console.log(obj);
+        }
     },
     enabled: function() {
         return enabled;
