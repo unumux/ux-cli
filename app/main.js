@@ -17,8 +17,14 @@ export default async function main() {
             debug.enable();
         }
 
+        // print the current version
+        if(argv.v || argv.version) {
+          console.log(util.getVersion());
+          process.kill();
+        }
+
         // enable experimental update notifications support
-        if(argv['update-enabled']) {
+        if(!argv['disable-updates']) {
           debug.log('Update support enabled');
           await util.checkForUpdates();
         }

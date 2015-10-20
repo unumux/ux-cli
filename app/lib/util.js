@@ -317,3 +317,13 @@ export async function checkForUpdates() {
 
   });
 }
+
+var version;
+
+export function getVersion() {
+  if(!version) {
+    var pkg = require('../../package.json');
+    version = pkg.version;
+  }
+  return version;
+}
