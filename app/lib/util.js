@@ -301,20 +301,18 @@ export async function updateLogin() {
 
 }
 
-export async function checkForUpdates() {
+export async function checkForUpdates(packageName, localVersion, globalInstall) {
   return new Promise((resolve, reject) => {
-    var pkg = require('../../package.json');
-    packageJson('@unumux/ux-cli', 'latest').then(async function(json) {
-        var updateAvailable = semver.gt(json.version, pkg.version);
+    packageJson(packageName, 'latest').then(async function(json) {
+        var updateAvailable = semver.gt(json.version, localVersion);
         if(updateAvailable) {
           var shouldUpdate = await question.yesNo('An update is available to ux-cli. Would you like to install it?');
           if(shouldUpdate) {
-            await execCmd('npm install @unumux/ux-cli -g', true);
-            resolve();
+            await execCmd(`npm install #{packageName} #{globalInstall ? '-g' : ''}`, true);
           }
         }
-    })
-
+        resolve();
+    });
   });
 }
 

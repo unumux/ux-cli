@@ -26,7 +26,8 @@ export default async function main() {
         // enable experimental update notifications support
         if(!argv['disable-updates']) {
           debug.log('Update support enabled');
-          await util.checkForUpdates();
+          var pkg = require('../package.json');
+          await util.checkForUpdates(pkg.name, pkg.version, true);
         }
 
         // why not
