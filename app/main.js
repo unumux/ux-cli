@@ -12,10 +12,15 @@ import createUXConfig from './lib/ux-config.js';
 
 export default async function main() {
     try {
-
         // enabled debug mode if debug or verbose arg set
         if(argv.debug || argv.verbose) {
             debug.enable();
+        }
+
+        // enable experimental update notifications support
+        if(argv['update-enabled']) {
+          debug.log('Update support enabled');
+          await util.checkForUpdates();
         }
 
         // why not

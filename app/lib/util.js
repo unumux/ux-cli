@@ -4,7 +4,10 @@ var exec = require('child_process').exec,
     fs = require('fs'),
     path = require('path'),
     glob = require('glob'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    packageJson = require('package-json'),
+    semver = require('semver');
+
 
 var debug = require('./debug.js');
 
@@ -18,7 +21,7 @@ function getUserHome() {
   return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
 }
 
-export function execCmd(cmd) {
+export function execCmd(cmd, visible) {
     debug.log(`Executing command: ${cmd}`);
     return new Promise((resolve, reject) => {
 
@@ -30,7 +33,7 @@ export function execCmd(cmd) {
             var args = ['-c', cmd];
         }
 
-        if(debug.enabled()) {
+        if(debug.enabled() || visible) {
             var stdio = [0, process.stdout, process.stderr];
         } else {
             var stdio = 'ignore';
@@ -296,4 +299,21 @@ export async function updateLogin() {
 
     fs.writeFileSync(configPath, JSON.stringify(config, null, 4));
 
+}
+
+export async function checkForUpdates() {
+  return new Promise((resolve, reject) => {
+    var pkg = require('../../package.json');
+    packageJson('@unumux/ux-cli', 'latest').then(async function(json) {
+        var updateAvailable = semver.gt(json.version, pkg.version);
+        if(updateAvailable) {
+          var shouldUpdate = await question.yesNo('An update is available to ux-cli. Would you like to install it?');
+          if(shouldUpdate) {
+            await execCmd('npm install @unumux/ux-cli -g', true);
+            resolve();
+          }
+        }
+    })
+
+  });
 }
