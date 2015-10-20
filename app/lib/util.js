@@ -306,9 +306,9 @@ export async function checkForUpdates(packageName, localVersion, globalInstall) 
     packageJson(packageName, 'latest').then(async function(json) {
         var updateAvailable = semver.gt(json.version, localVersion);
         if(updateAvailable) {
-          var shouldUpdate = await question.yesNo('An update is available to ux-cli. Would you like to install it?');
+          var shouldUpdate = await question.yesNo(`An update is available to ${packageName}. Would you like to install it?`);
           if(shouldUpdate) {
-            await execCmd(`npm install #{packageName} #{globalInstall ? '-g' : ''}`, true);
+            await execCmd(`npm install ${packageName} --loglevel=error ${globalInstall ? '-g' : '--save-dev'}`, true);
           }
         }
         resolve();

@@ -23,7 +23,7 @@ export default async function main() {
           process.kill();
         }
 
-        // enable experimental update notifications support
+        // experimental update notifications support
         if(!argv['disable-updates']) {
           debug.log('Update support enabled');
           var pkg = require('../package.json');
@@ -58,6 +58,9 @@ export default async function main() {
         // load package.json and check if ui-framework is installed
         debug.log("Loading package.json to check for ui-framework...");
         var packages = JSON.parse(fs.readFileSync('./package.json','utf8'));
+
+        // experimental update notifications for framework build tools
+        await util.checkForUpdates("@unumux/ui-framework", packages.devDependencies['@unumux/ui-framework'].replace('^', ''), false);
 
         if(!packages.hasOwnProperty('devDependencies') || !packages.devDependencies.hasOwnProperty('@unumux/ui-framework')) {
             debug.log("package.json doesn't have key for ui-framework. Prompting to install...");
