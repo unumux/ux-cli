@@ -1,6 +1,6 @@
 {
   "name": "@unumux/ux-cli",
-  "version": "3.0.0-beta2",
+  "version": "3.0.0-beta2.0",
   "description": "",
   "main": "app/index.js",
   "bin": {
