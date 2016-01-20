@@ -14,6 +14,7 @@
   "dependencies": {
     "@unumux/lib-ux": "^1.0.0",
     "babel": "^5.8.23",
+    "chokidar": "^1.4.2",
     "colors": "^1.1.2",
     "fs-extra": "^0.18.4",
     "glob": "^5.0.6",

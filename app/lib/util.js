@@ -7,7 +7,8 @@ var exec = require('child_process').exec,
     _ = require('lodash'),
     packageJson = require('package-json'),
     semver = require('semver'),
-    ux = require('@unumux/lib-ux');
+    ux = require('@unumux/lib-ux'),
+    chokidar = require('chokidar');
 
 
 var debug = require('./debug.js');
@@ -185,11 +186,28 @@ export async function runGulp(args) {
     });
 
     gulp.on('close', function(code) {
-        console.log(code)
         if (code !== 0) {
 
         }
+    });
 
+    return gulp;
+
+}
+
+export async function watchGulp() {
+    let gulpProcess = await runGulp([]);
+    let debounceTimeout;
+
+    chokidar.watch('node_modules/@unumux/ui-framework/**/*', {
+        ignored: ['node_modules/@unumux/ui-framework/node_modules', 'node_modules/@unumux/ui-framework/.git'],
+        ignoreInitial: true
+    }).on('all', (event, path) => {
+      clearTimeout(debounceTimeout);
+      setTimeout(async function() {
+          gulpProcess.kill('SIGINT');
+          gulpProcess = await runGulp(["--no-open"]);
+      }, 100);
     });
 }
 
