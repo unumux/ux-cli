@@ -6,7 +6,8 @@ var exec = require('child_process').exec,
     glob = require('glob'),
     _ = require('lodash'),
     packageJson = require('package-json'),
-    semver = require('semver');
+    semver = require('semver'),
+    ux = require('@unumux/lib-ux');
 
 
 var debug = require('./debug.js');
@@ -69,14 +70,19 @@ export function createBowerJson() {
     debug.log(`bower.json created`)
 }
 
-export function bowerInstall() {
-    console.log('Installing Bower packages...');
-    return execCmd('bower install');
+
+export async function bowerInstall() {
+    if(await ux.shouldInstallBowerPackages()) {
+        console.log('Installing Bower packages...');
+        return execCmd('bower install');
+    }
 }
 
-export function npmInstall() {
-    console.log('Installing NPM packages...');
-    return execCmd('npm install');
+export async function npmInstall() {
+    if(await ux.shouldInstallNPMPackages()) {
+        console.log('Installing NPM packages...');
+        return execCmd('npm install');
+    }
 }
 
 export async function installUIFramework() {

@@ -24,11 +24,11 @@ export default async function main() {
         }
 
         // experimental update notifications support
-        if(!argv['disable-updates']) {
-          debug.log('Update support enabled');
-          var pkg = require('../package.json');
-          await util.checkForUpdates(pkg.name, pkg.version, true);
-        }
+        // if(!argv['disable-updates']) {
+        //   debug.log('Update support enabled');
+        //   var pkg = require('../package.json');
+        //   await util.checkForUpdates(pkg.name, pkg.version, true);
+        // }
 
         // why not
         if(argv.upupdowndownleftrightleftrightbastart) {
@@ -65,12 +65,12 @@ export default async function main() {
             await util.installUIFramework();
         }
 
-        if(!argv['disable-updates']) {
-          packages = JSON.parse(fs.readFileSync('./package.json','utf8'));
-
-          // experimental update notifications for framework build tools
-          await util.checkForUpdates("@unumux/ui-framework", packages.devDependencies['@unumux/ui-framework'].replace('^', ''), false);
-        }
+        // if(!argv['disable-updates']) {
+        //   packages = JSON.parse(fs.readFileSync('./package.json','utf8'));
+        //
+        //   // experimental update notifications for framework build tools
+        //   await util.checkForUpdates("@unumux/ui-framework", packages.devDependencies['@unumux/ui-framework'].replace('^', ''), false);
+        // }
 
 
         debug.log('Checking for ux.json...');
@@ -101,7 +101,11 @@ export default async function main() {
 
         }
 
-        util.runGulp(argv._);
+        if(argv.dev || argv.develop || argv.development) {
+            util.watchGulp();
+        } else {
+            util.runGulp(argv._);
+        }
 
     } catch(e) {
         debug.error("There was an unexpected error. Details: " );
