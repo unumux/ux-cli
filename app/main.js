@@ -10,7 +10,7 @@ import * as debug from './lib/debug.js';
 import createUXConfig from './lib/ux-config.js';
 
 
-export default async function main() {
+module.exports = async function main() {
     try {
         // enabled debug mode if debug or verbose arg set
         if(argv.debug || argv.verbose) {
