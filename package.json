@@ -1,6 +1,6 @@
 {
   "name": "@unumux/ux-cli",
-  "version": "3.0.0-beta4",
+  "version": "3.0.0-beta6",
   "description": "",
   "main": "app/index.js",
   "bin": {
@@ -22,6 +22,7 @@
     "liftoff": "^2.0.3",
     "lodash": "^3.9.1",
     "minimist": "^1.1.1",
+    "npm-cache": "^0.5.1",
     "package-json": "^2.1.0",
     "prompt": "^0.2.14",
     "semver": "^5.0.3",

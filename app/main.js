@@ -59,12 +59,6 @@ export default async function main() {
         debug.log("Loading package.json to check for ui-framework...");
         var packages = JSON.parse(fs.readFileSync('./package.json','utf8'));
 
-        if(!packages.hasOwnProperty('devDependencies') || !packages.devDependencies.hasOwnProperty('@unumux/ui-framework')) {
-            debug.log("package.json doesn't have key for ui-framework. Prompting to install...");
-            debug.json(packages);
-            await util.installUIFramework();
-        }
-
         // if(!argv['disable-updates']) {
         //   packages = JSON.parse(fs.readFileSync('./package.json','utf8'));
         //

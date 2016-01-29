@@ -1,5 +1,6 @@
 
 var exec = require('child_process').exec,
+    execSync = require('child_process').execSync,
     spawn = require('child_process').spawn,
     fs = require('fs'),
     path = require('path'),
@@ -53,7 +54,10 @@ export function createPackageJson() {
     debug.log(`Creating package.json...`);
 
     let packageJson = {
-        private: true
+        private: true,
+        devDependencies: {
+            "@unumux/ux-build-tools": `^${getToolsVersion()}`
+        }
     }
 
     fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 4));
@@ -86,13 +90,23 @@ export async function npmInstall() {
     }
 }
 
+function getToolsVersion() {
+    let version = execSync('npm show @unumux/ux-build-tools version').toString().trim();
+    if(semver.valid(version)) {
+        return version;
+    } else {
+        return "3.0.0";
+    }
+}
+
 export async function installUIFramework() {
-    let shouldInstall = await question.yesNo('UI Framework not found. Would you like to install it?');
+    let shouldInstall = await question.yesNo('UX Build Tools not found. Would you like to install them?');
 
     if(shouldInstall) {
-        console.log('Installing UI Framework...')
-        debug.log('Starting UI Framework install...');
-        await execCmd('npm install @unumux/ui-framework --save-dev');
+        console.log('Installing UX Build Tools...')
+        debug.log('Getting latest version of ux-build-tools...');
+        let version = require("child_process").execSync('npm show @unumux/ux-build-tools version');
+        console.log(version.toString())
     }
 }
 
@@ -162,7 +176,7 @@ export async function createUXConfig() {
 function findGulpPath() {
     let gulpCmd = (process.platform === "win32" ? "gulp.cmd" : "gulp");
     let searchPaths = [
-        ['node_modules', '@unumux', 'ui-framework', 'node_modules', '.bin', gulpCmd],
+        ['node_modules', '@unumux', 'ux-build-tools', 'node_modules', '.bin', gulpCmd],
         ['node_modules', '.bin', gulpCmd]
     ];
 
@@ -179,7 +193,7 @@ function findGulpPath() {
 
 export async function runGulp(args) {
     let gulpCmd = findGulpPath();
-    let gulpArgs = args.concat(['--gulpfile=node_modules/@unumux/ui-framework/index.js', '--cwd=.']);
+    let gulpArgs = args.concat(['--gulpfile=node_modules/@unumux/ux-build-tools/index.js', '--cwd=.']);
 
     var gulp = spawn(gulpCmd, gulpArgs, {
         stdio: [0, process.stdout, process.stderr]
@@ -199,8 +213,8 @@ export async function watchGulp() {
     let gulpProcess = await runGulp([]);
     let debounceTimeout;
 
-    chokidar.watch('node_modules/@unumux/ui-framework/**/*', {
-        ignored: ['node_modules/@unumux/ui-framework/node_modules', 'node_modules/@unumux/ui-framework/.git'],
+    chokidar.watch('node_modules/@unumux/ux-build-tools/**/*', {
+        ignored: ['node_modules/@unumux/ux-build-tools/node_modules', 'node_modules/@unumux/ux-build-tools/.git'],
         ignoreInitial: true
     }).on('all', (event, path) => {
       clearTimeout(debounceTimeout);
