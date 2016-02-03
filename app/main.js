@@ -1,14 +1,8 @@
-var fs = require('fs'),
-    path = require('path'),
-    argv = require('minimist')(process.argv.slice(2)),
-    colors = require('colors');
+var fs = require("fs"),
+    argv = require("minimist")(process.argv.slice(2));
 
-import * as question from "@unumux/ux-questions";
-
-import * as util from './lib/util.js';
-import * as debug from './lib/debug.js';
-import createUXConfig from './lib/ux-config.js';
-
+import * as util from "./lib/util.js";
+import * as debug from "./lib/debug.js";
 
 module.exports = async function main() {
     try {
@@ -19,8 +13,8 @@ module.exports = async function main() {
 
         // print the current version
         if(argv.v || argv.version) {
-          console.log(util.getVersion());
-          process.kill();
+            console.log(util.getVersion());
+            process.kill();
         }
 
         // experimental update notifications support
@@ -32,7 +26,7 @@ module.exports = async function main() {
 
         // why not
         if(argv.upupdowndownleftrightleftrightbastart) {
-            console.log('Why did you think this would work?'.zalgo.rainbow);
+            console.log("Why did you think this would work?".zalgo.rainbow);
         }
 
         // check for login param
@@ -46,18 +40,14 @@ module.exports = async function main() {
         var reconfigure = argv.reconfigure || argv.reconfig || argv.configure || argv.config;
 
         // if package.json does not exist, create it
-        if(!fs.existsSync('./package.json')) {
+        if(!fs.existsSync("./package.json")) {
             util.createPackageJson();
         }
 
         // if bower.json does not exist, create it
-        if(!fs.existsSync('./bower.json')) {
+        if(!fs.existsSync("./bower.json")) {
             util.createBowerJson();
         }
-
-        // load package.json and check if ui-framework is installed
-        debug.log("Loading package.json to check for ui-framework...");
-        var packages = JSON.parse(fs.readFileSync('./package.json','utf8'));
 
         // if(!argv['disable-updates']) {
         //   packages = JSON.parse(fs.readFileSync('./package.json','utf8'));
@@ -66,19 +56,18 @@ module.exports = async function main() {
         //   await util.checkForUpdates("@unumux/ui-framework", packages.devDependencies['@unumux/ui-framework'].replace('^', ''), false);
         // }
 
-
-        debug.log('Checking for ux.json...');
-        var newInstall = !fs.existsSync('./ux.json');
+        debug.log("Checking for ux.json...");
+        var newInstall = !fs.existsSync("./ux.json");
 
         // create config file, if it does not exist or if reconfigure switch is passed
         if(newInstall || reconfigure) {
-            debug.log('ux.json not found. Prompting to create one...');
+            debug.log("ux.json not found. Prompting to create one...");
             await util.createUXConfig();
         }
 
         // install additional libraries, if first setup, if reconfigure switch is passed, or if --install is passed
         if(newInstall || reconfigure || argv.install) {
-            debug.log('Prompting to install libraries...');
+            debug.log("Prompting to install libraries...");
             await util.installLibraries();
         }
 
@@ -105,4 +94,4 @@ module.exports = async function main() {
         debug.error("There was an unexpected error. Details: " );
         debug.error(e);
     }
-}
+};

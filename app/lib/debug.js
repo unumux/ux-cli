@@ -1,6 +1,6 @@
-var colors = require('colors');
-var stackTrace = require('stack-trace');
-var path = require('path');
+var colors = require("colors");
+var stackTrace = require("stack-trace");
+var path = require("path");
 
 var enabled = false;
 
@@ -38,4 +38,4 @@ module.exports = {
     enabled: function() {
         return enabled;
     }
-}
+};

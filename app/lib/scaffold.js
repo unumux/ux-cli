@@ -1,18 +1,18 @@
-var fs = require('fs-extra'),
-    path = require('path');
+var fs = require("fs-extra"),
+    path = require("path");
 
 export function styles(dest) {
-    fs.copySync(path.join(__dirname, '../../template/styles'), path.join(dest, 'styles'));
+    fs.copySync(path.join(__dirname, "../../template/styles"), path.join(dest, "styles"));
     return ["styles"];
 }
 
 export function scripts(dest) {
-    fs.copySync(path.join(__dirname, '../../template/scripts'), path.join(dest, 'scripts'));
+    fs.copySync(path.join(__dirname, "../../template/scripts"), path.join(dest, "scripts"));
     return ["scripts"];
 }
 
 export function markup(dest) {
-    fs.copySync(path.join(__dirname, '../../template/index.html'), path.join(dest, 'index.html'));
+    fs.copySync(path.join(__dirname, "../../template/index.html"), path.join(dest, "index.html"));
     return ["index.html"];
 }
 

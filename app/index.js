@@ -1,10 +1,5 @@
 #!/usr/bin/env node
-var path = require('path');
+require("babel-register");
+require("babel-polyfill");
 
-// path to node_modules
-var nmPath = path.join(__dirname, '../', 'node_modules');
-
-require('babel-register');
-require('babel-polyfill');
-
-require('./main.js')();
+require("./main.js")();
