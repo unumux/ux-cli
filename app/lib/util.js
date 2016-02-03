@@ -13,9 +13,9 @@ var exec = require('child_process').exec,
 
 
 var debug = require('./debug.js');
+import * as question from "@unumux/ux-questions";
 
 import * as UXConfig from './ux-config.js';
-import * as question from './question.js';
 import * as scaffold from './scaffold.js';
 
 var isWin = process.platform === 'win32';
@@ -111,19 +111,8 @@ export async function installUIFramework() {
 }
 
 async function generateConfig(paths) {
-    if(paths.scss.length > 1) {
-        var scssPath = await question.list('Where are your SCSS files stored?', paths.scss);
-    }
-    else if(paths.scss.length > 0) {
-        var scssPath = paths.scss[0];
-    }
-
-    if(paths.js.length > 1) {
-        var jsPath = await question.list('Where are your JS files stored?', paths.js);
-    }
-    else if(paths.js.length > 0) {
-        var jsPath = paths.js[0];
-    }
+    var scssPath = await question.list('Where are your SCSS files stored?', paths.scss);
+    var jsPath = await question.list('Where are your JS files stored?', paths.js);
 
     if(paths.other.length > 0) {
         if(paths.other.length === 1 && paths.other[0] === "index.html") {

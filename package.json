@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@unumux/lib-ux": "^1.0.0",
+    "@unumux/ux-questions": "^1.0.1",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-stage-1": "^6.3.13",
     "babel-register": "^6.4.3",
@@ -27,5 +28,10 @@
     "package-json": "^2.3.0",
     "semver": "^5.1.0",
     "stack-trace": "0.0.9"
+  },
+  "devDependencies": {
+    "@unumux/eslint-config-unumux": "^1.0.1",
+    "babel-eslint": "^5.0.0-beta6",
+    "eslint": "^1.10.3"
   }
 }

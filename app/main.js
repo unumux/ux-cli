@@ -3,7 +3,7 @@ var fs = require('fs'),
     argv = require('minimist')(process.argv.slice(2)),
     colors = require('colors');
 
-import * as question from "./lib/question.js";
+import * as question from "@unumux/ux-questions";
 
 import * as util from './lib/util.js';
 import * as debug from './lib/debug.js';
