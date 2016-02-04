@@ -2,7 +2,7 @@ var fs = require("fs"),
     argv = require("minimist")(process.argv.slice(2));
 
 import * as util from "./lib/util.js";
-import * as debug from "./lib/debug.js";
+import * as debug from "@unumux/ux-debug";
 
 module.exports = async function main() {
     try {
@@ -23,11 +23,6 @@ module.exports = async function main() {
         //   var pkg = require('../package.json');
         //   await util.checkForUpdates(pkg.name, pkg.version, true);
         // }
-
-        // why not
-        if(argv.upupdowndownleftrightleftrightbastart) {
-            console.log("Why did you think this would work?".zalgo.rainbow);
-        }
 
         // check for login param
         if(argv.login) {

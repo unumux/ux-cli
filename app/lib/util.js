@@ -11,10 +11,9 @@ var exec = require("child_process").exec,
     chokidar = require("chokidar");
 
 
-var debug = require("./debug.js");
-
 import * as UXConfig from "./ux-config.js";
 import * as question from "@unumux/ux-questions";
+import * as debug from "@unumux/ux-debug";
 import * as scaffold from "./scaffold.js";
 
 var isWin = process.platform === "win32";
