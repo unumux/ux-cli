@@ -82,6 +82,7 @@ module.exports = async function main() {
         if(argv.dev || argv.develop || argv.development) {
             util.watchGulp();
         } else {
+            debug.log("Attempting to run project...");
             util.runGulp(argv._);
         }
 

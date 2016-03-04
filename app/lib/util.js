@@ -45,6 +45,9 @@ export function createPackageJson() {
         private: true,
         devDependencies: {
             "@unumux/ux-build-tools": `^${getToolsVersion()}`
+        },
+        scripts: {
+            start: "gulp --gulpfile=node_modules/@unumux/ux-build-tools/index.js --cwd=."
         }
     };
 
@@ -169,10 +172,17 @@ function findGulpPath() {
 }
 
 export async function runGulp(args) {
-    let gulpCmd = findGulpPath();
-    let gulpArgs = args.concat(["--gulpfile=node_modules/@unumux/ux-build-tools/index.js", "--cwd=."]);
+    // check npm start to see if defined
+    let packageJson = JSON.parse(fs.readFileSync("./package.json"));
+    if(packageJson && packageJson.scripts && packageJson.scripts.start) {
+        var cmd = "npm";
+        var args = ["start"];
+    } else {
+        var cmd = findGulpPath();
+        var args = args.concat(["--gulpfile=node_modules/@unumux/ui-framework/index.js", "--cwd=."]);
+    }
 
-    var gulp = spawn(gulpCmd, gulpArgs, {
+    var gulp = spawn(cmd, args, {
         stdio: [0, process.stdout, process.stderr]
     });
 
@@ -190,8 +200,8 @@ export async function watchGulp() {
     let gulpProcess = await runGulp([]);
     let debounceTimeout;
 
-    chokidar.watch("node_modules/@unumux/ux-build-tools/**/*", {
-        ignored: ["node_modules/@unumux/ux-build-tools/node_modules", "node_modules/@unumux/ux-build-tools/.git"],
+    chokidar.watch("node_modules/@unumux/ui-framework/**/*", {
+        ignored: ["node_modules/@unumux/ui-framework/node_modules", "node_modules/@unumux/ui-framework/.git"],
         ignoreInitial: true
     }).on("all", () => {
         clearTimeout(debounceTimeout);
