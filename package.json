@@ -3,18 +3,19 @@
   "version": "3.0.0-beta8",
   "description": "",
   "repository": "https://github.com/unumux/ux-cli",
-  "main": "app/index.js",
+  "main": "dist/index.js",
   "bin": {
-    "ux": "app/index.js"
+    "ux": "dist/index.js"
   },
   "scripts": {
+    "start": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Carl Henderson <chuckhendo@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "@unumux/lib-ux": "^1.0.0",
-    "@unumux/ux-debug": "^1.0.0",
+    "@unumux/ux-debug": "^1.1.0",
     "@unumux/ux-questions": "^1.0.1",
     "babel-polyfill": "^6.6.1",
     "babel-preset-es2015": "^6.3.13",
@@ -33,6 +34,9 @@
   "devDependencies": {
     "@unumux/eslint-config-unumux": "^1.0.1",
     "babel-eslint": "^5.0.0-beta6",
-    "eslint": "^1.10.3"
+    "babel-plugin-transform-async-to-module-method": "^6.7.0",
+    "eslint": "^1.10.3",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-babel": "^6.1.2"
   }
 }
