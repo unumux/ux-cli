@@ -74,8 +74,25 @@ module.exports = function () {
                         // aliases for reconfigure switch
                         reconfigure = argv.reconfigure || argv.reconfig || argv.configure || argv.config;
 
-                        // if package.json does not exist, create it
+                        // check for ux.json, and provide option to create it/cancel
 
+                        debug.log("Checking for ux.json...");
+                        newInstall = !fs.existsSync("./ux.json");
+
+                        // create config file, if it does not exist or if reconfigure switch is passed
+
+                        if (!(newInstall || reconfigure)) {
+                            _context.next = 16;
+                            break;
+                        }
+
+                        debug.log("ux.json not found. Prompting to create one...");
+                        _context.next = 16;
+                        return util.createUXConfig();
+
+                    case 16:
+
+                        // if package.json does not exist, create it
                         if (!fs.existsSync("./package.json")) {
                             util.createPackageJson();
                         }
@@ -92,21 +109,8 @@ module.exports = function () {
                         //   await util.checkForUpdates("@unumux/ui-framework", packages.devDependencies['@unumux/ui-framework'].replace('^', ''), false);
                         // }
 
-                        debug.log("Checking for ux.json...");
-                        newInstall = !fs.existsSync("./ux.json");
+                        // install additional libraries, if first setup, if reconfigure switch is passed, or if --install is passed
 
-                        // create config file, if it does not exist or if reconfigure switch is passed
-
-                        if (!(newInstall || reconfigure)) {
-                            _context.next = 18;
-                            break;
-                        }
-
-                        debug.log("ux.json not found. Prompting to create one...");
-                        _context.next = 18;
-                        return util.createUXConfig();
-
-                    case 18:
                         if (!(newInstall || reconfigure || argv.install)) {
                             _context.next = 22;
                             break;

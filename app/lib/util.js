@@ -135,7 +135,7 @@ async function generateConfig(paths) {
 }
 
 export async function createUXConfig() {
-    let shouldCreate = await question.yesNo('ux.json not found. Would you like to create one?');
+    let shouldCreate = await question.yesNo("This does not appear to be a UX project. Would you like to install the ux-build-tools?");
 
     if(shouldCreate) {
         let isSitecoreSite = UXConfig.detectIfSitecoreSite(process.cwd());
@@ -151,6 +151,8 @@ export async function createUXConfig() {
 
 
         }
+    } else {
+        process.exit();
     }
 }
 

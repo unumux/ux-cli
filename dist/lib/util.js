@@ -212,13 +212,13 @@ var createUXConfig = exports.createUXConfig = function () {
                 switch (_context5.prev = _context5.next) {
                     case 0:
                         _context5.next = 2;
-                        return question.yesNo('ux.json not found. Would you like to create one?');
+                        return question.yesNo("This does not appear to be a UX project. Would you like to install the ux-build-tools?");
 
                     case 2:
                         shouldCreate = _context5.sent;
 
                         if (!shouldCreate) {
-                            _context5.next = 19;
+                            _context5.next = 21;
                             break;
                         }
 
@@ -251,6 +251,13 @@ var createUXConfig = exports.createUXConfig = function () {
                         return generateConfig(_paths);
 
                     case 19:
+                        _context5.next = 22;
+                        break;
+
+                    case 21:
+                        process.exit();
+
+                    case 22:
                     case "end":
                         return _context5.stop();
                 }
