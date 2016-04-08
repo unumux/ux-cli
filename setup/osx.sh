@@ -19,15 +19,15 @@ checkCmd() {
 installNvm() {
   echo "Installing nvm..."
   touch ~/.profile
-  curl https://raw.githubusercontent.com/creationix/nvm/v0.23.3/install.sh | bash
+  curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
   source ~/.profile
   echo "Nvm installed!"
 }
 
 installNode() {
   echo "Installing node..."
-  nvm install v0.12
-  nvm alias default 0.12
+  nvm install v4.4
+  nvm alias default v4.4
   nvm use default
   echo "Node installed!"
 }

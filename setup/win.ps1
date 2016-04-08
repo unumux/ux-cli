@@ -1,5 +1,8 @@
 $tmp = $env:TEMP
 
+$nodeUrl = "https://nodejs.org/dist/v4.4.2/node-v4.4.2.pkg"
+$gitUrl = "https://github.com/git-for-windows/git/releases/download/v2.8.1.windows.1/Git-2.8.1-32-bit.exe"
+
 Function Reload-Path {
   $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine")
 }
@@ -54,13 +57,13 @@ Function Run-Main {
 
 
   if(-not (Get-Command node 2>$null)) {
-    Download-And-Install "node" "http://nodejs.org/dist/v0.12.4/node-v0.12.4-x86.msi" "$tmp\node.msi"
+    Download-And-Install "node" $nodeUrl "$tmp\node.msi"
   }
 
   if(-not(Get-Command git 2>$null)) {
       echo "Git not installed. Downloading Git..."
       Download-File "https://raw.githubusercontent.com/unumux/ux-cli/master/setup/git.inf" "$tmp\git.inf"
-      Download-File "https://github.com/git-for-windows/git/releases/download/v2.5.1.windows.1/Git-2.5.1-32-bit.exe" "$tmp\git-install.exe"
+      Download-File $gitUrl "$tmp\git-install.exe"
       echo "Installing Git..."
       & "$tmp\git-install.exe" /LOADINF="$tmp\git.inf" /SILENT | Out-Null
       Reload-Path
