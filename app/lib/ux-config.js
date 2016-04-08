@@ -1,5 +1,5 @@
-var fs = require('fs'),
-    path = require('path');
+var fs = require("fs"),
+    path = require("path");
 
 import * as util from "./util.js";
 
@@ -8,16 +8,16 @@ export class Config {
 
         if(paths.scss) {
             this.scss = {
-                src: this.appendGlobs(paths.scss, 'scss'),
+                src: this.appendGlobs(paths.scss, "scss"),
                 dest: paths.scss
-            }
+            };
         }
 
         if(paths.js) {
             this.js = {
-                src: this.appendGlobs(paths.js, 'js'),
+                src: this.appendGlobs(paths.js, "js"),
                 dest: paths.js
-            }
+            };
         }
 
         if(paths.watch) {
@@ -40,7 +40,7 @@ export class Config {
 
     }
 
-    appendGlobs(folder, ext='*') {
+    appendGlobs(folder, ext="*") {
 
         // check if folder is actually a folder
         if(fs.statSync(folder).isDirectory()) {
@@ -54,7 +54,7 @@ export class Config {
 
     write(writePath) {
         if(writePath) {
-            fs.writeFile(writePath, JSON.stringify(this, null, 4))
+            fs.writeFile(writePath, JSON.stringify(this, null, 4));
         }
     }
 }
@@ -71,7 +71,7 @@ export function detectIfSitecoreSite(dir) {
     var pathParts = dir.split(path.sep);
 
     // check if sitecore site
-    if(pathParts.indexOf('AllSites') >= 0 && pathParts.indexOf('SiteCore') >= 0 && pathParts.indexOf('UI') >= 0) {
+    if(pathParts.indexOf("AllSites") >= 0 && pathParts.indexOf("SiteCore") >= 0 && pathParts.indexOf("UI") >= 0) {
         // this is a Sitecore site
         return true;
     }
@@ -93,7 +93,7 @@ export function findSitecorePaths(dir) {
     var pathParts = dir.split(path.sep);
 
     // make sure we are in the correct spot
-    if(pathParts[pathParts.length - 3] === 'UI') {
+    if(pathParts[pathParts.length - 3] === "UI") {
         var pathSuffix = pathParts.slice(-2).join(path.sep);
 
         var relativePrefix = ["..", "..", ".."].join(path.sep);
@@ -123,6 +123,6 @@ export function findSitecorePaths(dir) {
  */
 
 export async function findPaths(dir) {
-    var ignorePaths = ['node_modules', 'bower_components', 'bin', 'dist', 'App_Data', 'App_Start', 'obj'];
+    var ignorePaths = ["node_modules", "bower_components", "bin", "dist", "App_Data", "App_Start", "obj"];
     return await util.findFiles(path.join(dir), ignorePaths);
 }
