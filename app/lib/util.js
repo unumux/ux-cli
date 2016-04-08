@@ -15,6 +15,7 @@ import * as UXConfig from "./ux-config.js";
 import * as question from "@unumux/ux-questions";
 import * as debug from "@unumux/ux-debug";
 import * as scaffold from "./scaffold.js";
+import * as libraries from "./libraries.js";
 
 var isWin = process.platform === "win32";
 
@@ -314,25 +315,10 @@ export async function findFiles(globPath, ignorePaths) {
 }
 
 export async function installLibraries() {
-    var additionalLibraries = await question.checkbox("Would you like to install any additional libraries?", [{
-        name: "Colonial Life Framework & Branding",
-        value: "unumux/colonial-branding"
-    }, {
-        name: "jQuery",
-        value: "jquery"
-    }, {
-        name: "Knockout",
-        value: "knockout"
-    }, {
-        name: "Angular",
-        value: "angular"
-    }, {
-        name: "ReactJS",
-        value: "react"
-    }]);
+    var additionalLibraries = await question.checkbox("Would you like to install any additional libraries?", libraries.get());
 
     if (additionalLibraries.length > 0) {
-        await execCmd(`bower install --save ${additionalLibraries.join(" ")}`);
+        await libraries.install(additionalLibraries);
     }
 }
 
