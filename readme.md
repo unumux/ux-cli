@@ -19,7 +19,7 @@ bash -c "$(curl https://raw.githubusercontent.com/unumux/ux-cli/master/setup/osx
 
 Running the command below at your command prompt will install Git and Node (if needed), setup Git to use 'https' instead of 'ssh', and then install the latest version of ux-cli as a global package.
 
-This may need to be run from a command prompt as Administrator
+After the install is complete, you will need to close that command prompt window and open a new one before the tools are available for use.
 
 ```
 @powershell -NoProfile -ExecutionPolicy unrestricted -Command "$wc=new-object net.webclient;$wc.DownloadString('http://raw.githubusercontent.com/unumux/ux-cli/master/setup/win.ps1') | iex"

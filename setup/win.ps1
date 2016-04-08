@@ -1,6 +1,6 @@
 $tmp = $env:TEMP
 
-$nodeUrl = "https://nodejs.org/dist/v4.4.2/node-v4.4.2.pkg"
+$nodeUrl = "https://nodejs.org/dist/v4.4.2/node-v4.4.2-x64.msi"
 $gitUrl = "https://github.com/git-for-windows/git/releases/download/v2.8.1.windows.1/Git-2.8.1-32-bit.exe"
 
 Function Reload-Path {
@@ -46,6 +46,7 @@ Function Download-File($url, $targetFile, $auth) {
 Function Download-And-Install($name, $url, $file) {
   echo "$name not installed. Downloading $name..."
   Download-File $url $file
+  echo "$url $file"
   echo "Installing $name..."
   $installStatement = [System.Diagnostics.Process]::Start( "msiexec", "/i $file /quiet" )
   $installStatement.WaitForExit()
