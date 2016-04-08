@@ -42,6 +42,16 @@ module.exports = async function main() {
 
         // aliases for reconfigure switch
         var reconfigure = argv.reconfigure || argv.reconfig || argv.configure || argv.config;
+        
+        // check for ux.json, and provide option to create it/cancel
+        debug.log("Checking for ux.json...");
+        var newInstall = !fs.existsSync("./ux.json");
+
+        // create config file, if it does not exist or if reconfigure switch is passed
+        if(newInstall || reconfigure) {
+            debug.log("ux.json not found. Prompting to create one...");
+            await util.createUXConfig();
+        }
 
         // if package.json does not exist, create it
         if(!fs.existsSync("./package.json")) {
@@ -59,15 +69,6 @@ module.exports = async function main() {
         //   // experimental update notifications for framework build tools
         //   await util.checkForUpdates("@unumux/ui-framework", packages.devDependencies['@unumux/ui-framework'].replace('^', ''), false);
         // }
-
-        debug.log("Checking for ux.json...");
-        var newInstall = !fs.existsSync("./ux.json");
-
-        // create config file, if it does not exist or if reconfigure switch is passed
-        if(newInstall || reconfigure) {
-            debug.log("ux.json not found. Prompting to create one...");
-            await util.createUXConfig();
-        }
 
         // install additional libraries, if first setup, if reconfigure switch is passed, or if --install is passed
         if(newInstall || reconfigure || argv.install) {

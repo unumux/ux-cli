@@ -212,13 +212,13 @@ var createUXConfig = exports.createUXConfig = function () {
                 switch (_context5.prev = _context5.next) {
                     case 0:
                         _context5.next = 2;
-                        return question.yesNo('ux.json not found. Would you like to create one?');
+                        return question.yesNo("This does not appear to be a UX project. Would you like to install the ux-build-tools?");
 
                     case 2:
                         shouldCreate = _context5.sent;
 
                         if (!shouldCreate) {
-                            _context5.next = 19;
+                            _context5.next = 21;
                             break;
                         }
 
@@ -251,6 +251,13 @@ var createUXConfig = exports.createUXConfig = function () {
                         return generateConfig(_paths);
 
                     case 19:
+                        _context5.next = 22;
+                        break;
+
+                    case 21:
+                        process.exit();
+
+                    case 22:
                     case "end":
                         return _context5.stop();
                 }
@@ -542,22 +549,7 @@ var installLibraries = exports.installLibraries = function () {
                 switch (_context11.prev = _context11.next) {
                     case 0:
                         _context11.next = 2;
-                        return question.checkbox("Would you like to install any additional libraries?", [{
-                            name: "Colonial Life Framework & Branding",
-                            value: "unumux/colonial-branding"
-                        }, {
-                            name: "jQuery",
-                            value: "jquery"
-                        }, {
-                            name: "Knockout",
-                            value: "knockout"
-                        }, {
-                            name: "Angular",
-                            value: "angular"
-                        }, {
-                            name: "ReactJS",
-                            value: "react"
-                        }]);
+                        return question.checkbox("Would you like to install any additional libraries?", libraries.get());
 
                     case 2:
                         additionalLibraries = _context11.sent;
@@ -568,7 +560,7 @@ var installLibraries = exports.installLibraries = function () {
                         }
 
                         _context11.next = 6;
-                        return execCmd("bower install --save " + additionalLibraries.join(" "));
+                        return libraries.install(additionalLibraries);
 
                     case 6:
                     case "end":
@@ -710,6 +702,10 @@ var debug = _interopRequireWildcard(_uxDebug);
 var _scaffold = require("./scaffold.js");
 
 var scaffold = _interopRequireWildcard(_scaffold);
+
+var _libraries = require("./libraries.js");
+
+var libraries = _interopRequireWildcard(_libraries);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
