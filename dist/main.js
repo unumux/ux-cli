@@ -8,6 +8,12 @@ var _uxDebug = require("@unumux/ux-debug");
 
 var debug = _interopRequireWildcard(_uxDebug);
 
+var _updateNotifier = require("update-notifier");
+
+var _updateNotifier2 = _interopRequireDefault(_updateNotifier);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
@@ -17,7 +23,7 @@ var fs = require("fs"),
 
 module.exports = function () {
     var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-        var reconfigure, newInstall, buildTools;
+        var pkg, ONE_HOUR, notifier, reconfigure, newInstall, buildTools;
         return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
@@ -32,31 +38,38 @@ module.exports = function () {
                         // print the current version
                         if (argv.v || argv.version) {
                             console.log(util.getVersion());
-                            process.kill();
+                            process.exit();
                         }
 
                         // experimental update notifications support
-                        // if(!argv['disable-updates']) {
-                        //   debug.log('Update support enabled');
-                        //   var pkg = require('../package.json');
-                        //   await util.checkForUpdates(pkg.name, pkg.version, true);
-                        // }
+                        if (!argv['disable-updates']) {
+                            debug.log('Update support enabled');
+                            pkg = require('../package.json');
+                            ONE_HOUR = 1000 * 60 * 60;
+                            notifier = (0, _updateNotifier2.default)({ pkg: pkg, updateCheckInterval: ONE_HOUR });
+
+                            // if statement to prevent showing notifications if update happened recently
+
+                            if (notifier.update && notifier.update.latest !== pkg.version) {
+                                notifier.notify({ defer: false });
+                            }
+                        }
 
                         // check for login param
 
                         if (!argv.login) {
-                            _context.next = 8;
+                            _context.next = 9;
                             break;
                         }
 
                         debug.log("Updating login");
-                        _context.next = 7;
+                        _context.next = 8;
                         return util.updateLogin();
 
-                    case 7:
+                    case 8:
                         debug.log("Login enabled");
 
-                    case 8:
+                    case 9:
 
                         // aliases for reconfigure switch
                         reconfigure = argv.reconfigure || argv.reconfig || argv.configure || argv.config;
@@ -85,54 +98,55 @@ module.exports = function () {
                         // create config file, if it does not exist or if reconfigure switch is passed
 
                         if (!(newInstall || reconfigure)) {
-                            _context.next = 17;
+                            _context.next = 18;
                             break;
                         }
 
                         debug.log("ux.json not found. Prompting to create one...");
-                        _context.next = 17;
+                        _context.next = 18;
                         return util.createUXConfig();
 
-                    case 17:
+                    case 18:
                         if (!(newInstall || reconfigure || argv.install)) {
-                            _context.next = 21;
+                            _context.next = 22;
                             break;
                         }
 
                         debug.log("Prompting to install libraries...");
-                        _context.next = 21;
+                        _context.next = 22;
                         return util.installLibraries();
 
-                    case 21:
+                    case 22:
                         if (!(argv.packages !== false)) {
-                            _context.next = 28;
+                            _context.next = 29;
                             break;
                         }
 
                         if (!(argv.npm !== false)) {
-                            _context.next = 25;
+                            _context.next = 26;
                             break;
                         }
 
-                        _context.next = 25;
+                        _context.next = 26;
                         return util.npmInstall();
 
-                    case 25:
+                    case 26:
                         if (!(argv.bower !== false)) {
-                            _context.next = 28;
+                            _context.next = 29;
                             break;
                         }
 
-                        _context.next = 28;
+                        _context.next = 29;
                         return util.bowerInstall();
 
-                    case 28:
+                    case 29:
 
                         console.log("Starting UX...");
-                        _context.next = 31;
+
+                        _context.next = 32;
                         return util.determineBuildTools();
 
-                    case 31:
+                    case 32:
                         buildTools = _context.sent;
 
 
@@ -143,22 +157,22 @@ module.exports = function () {
                             util.runGulp(buildTools, argv._);
                         }
 
-                        _context.next = 39;
+                        _context.next = 40;
                         break;
 
-                    case 35:
-                        _context.prev = 35;
+                    case 36:
+                        _context.prev = 36;
                         _context.t0 = _context["catch"](0);
 
                         console.error("There was an unexpected error. Details: ");
                         console.error(_context.t0);
 
-                    case 39:
+                    case 40:
                     case "end":
                         return _context.stop();
                 }
             }
-        }, _callee, this, [[0, 35]]);
+        }, _callee, this, [[0, 36]]);
     }));
 
     function main() {

@@ -1,6 +1,6 @@
 {
   "name": "@unumux/ux-cli",
-  "version": "3.0.0-beta8",
+  "version": "2.13.0",
   "description": "",
   "repository": "https://github.com/unumux/ux-cli",
   "main": "dist/index.js",
@@ -29,7 +29,8 @@
     "minimist": "^1.1.1",
     "package-json": "^2.3.0",
     "semver": "^5.1.0",
-    "stack-trace": "0.0.9"
+    "stack-trace": "0.0.9",
+    "update-notifier": "^0.6.3"
   },
   "devDependencies": {
     "@unumux/eslint-config-unumux": "^1.0.1",

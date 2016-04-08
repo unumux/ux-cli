@@ -3,8 +3,9 @@ var fs = require("fs"),
 
 import * as util from "./lib/util.js";
 import * as debug from "@unumux/ux-debug";
+import updateNotifier from "update-notifier";
 
-module.exports = async function main() {
+module.exports = async function main() {    
     try {
         // enabled debug mode if debug or verbose arg set
         if(argv.debug || argv.verbose) {
@@ -14,16 +15,24 @@ module.exports = async function main() {
         // print the current version
         if(argv.v || argv.version) {
             console.log(util.getVersion());
-            process.kill();
+            process.exit();
         }
 
         // experimental update notifications support
-        // if(!argv['disable-updates']) {
-        //   debug.log('Update support enabled');
-        //   var pkg = require('../package.json');
-        //   await util.checkForUpdates(pkg.name, pkg.version, true);
-        // }
-
+        if(!argv['disable-updates']) {
+          debug.log('Update support enabled');
+          let pkg = require('../package.json');
+          const ONE_HOUR = 1000 * 60 * 60;
+          let notifier = updateNotifier({pkg, updateCheckInterval: ONE_HOUR});
+          
+          // if statement to prevent showing notifications if update happened recently
+          if(notifier.update && notifier.update.latest !== pkg.version) {
+            notifier.notify({defer: false});              
+          }
+          
+        }
+        
+       
         // check for login param
         if(argv.login) {
             debug.log("Updating login");
@@ -65,6 +74,7 @@ module.exports = async function main() {
             debug.log("Prompting to install libraries...");
             await util.installLibraries();
         }
+        
 
         // install packages if switches to override are not set
         if(argv.packages !== false) {
@@ -80,6 +90,7 @@ module.exports = async function main() {
         }
         
         console.log("Starting UX...");
+        
         let buildTools = await util.determineBuildTools();
         
         if(argv.dev || argv.develop || argv.development) {
