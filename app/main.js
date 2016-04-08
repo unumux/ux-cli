@@ -78,16 +78,19 @@ module.exports = async function main() {
             }
 
         }
-
+        
+        console.log("Starting UX...");
+        let buildTools = await util.determineBuildTools();
+        
         if(argv.dev || argv.develop || argv.development) {
             util.watchGulp();
         } else {
             debug.log("Attempting to run project...");
-            util.runGulp(argv._);
+            util.runGulp(buildTools, argv._);
         }
 
     } catch(e) {
-        debug.error("There was an unexpected error. Details: " );
-        debug.error(e);
+        console.error("There was an unexpected error. Details: " );
+        console.error(e);
     }
 };

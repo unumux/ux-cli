@@ -171,16 +171,9 @@ function findGulpPath() {
     return gulpCmd;
 }
 
-export async function runGulp(args) {
-    // check npm start to see if defined
-    let packageJson = JSON.parse(fs.readFileSync("./package.json"));
-    if(packageJson && packageJson.scripts && packageJson.scripts.start) {
-        var cmd = "npm";
-        var args = ["start"];
-    } else {
-        var cmd = findGulpPath();
-        var args = args.concat(["--gulpfile=node_modules/@unumux/ui-framework/index.js", "--cwd=."]);
-    }
+export async function runGulp(tools, args) {
+    var cmd = findGulpPath();
+    var args = args.concat([`--gulpfile=node_modules/${tools}/index.js`, "--cwd=."]);
 
     var gulp = spawn(cmd, args, {
         stdio: [0, process.stdout, process.stderr]
@@ -194,6 +187,28 @@ export async function runGulp(args) {
 
     return gulp;
 
+}
+
+function pathExists(pathName) {
+    return new Promise((resolve, reject) => {
+        fs.stat(pathName, (err, stats) => {
+            if(err) {
+                resolve(false);
+            } else {
+                resolve(true);
+            }
+        });     
+    });
+}
+
+export async function determineBuildTools() {
+    if(await pathExists("node_modules/@unumux/ux-build-tools")) {
+        return "@unumux/ux-build-tools";
+    } else if(await pathExists("node_modules/@unumux/ui-framework")) {
+        return "@unumux/ui-framework";
+    } else {
+        throw "UX Build Tools does not seem to be installed. Try running `npm install -D @unumux/ux-build-tools`";
+    }        
 }
 
 export async function watchGulp() {
