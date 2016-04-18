@@ -160,7 +160,8 @@ function findGulpPath() {
     let gulpCmd = (process.platform === "win32" ? "gulp.cmd" : "gulp");
     let searchPaths = [
         ["node_modules", "@unumux", "ux-build-tools", "node_modules", ".bin", gulpCmd],
-        ["node_modules", ".bin", gulpCmd]
+        ["node_modules", ".bin", gulpCmd],
+        ["node_modules", "@unumux", "ui-framework", "node_modules", ".bin", gulpCmd],
     ];
 
     searchPaths.forEach(function(searchPathTmp) {

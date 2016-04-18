@@ -784,7 +784,7 @@ function getToolsVersion() {
 
 function findGulpPath() {
     var gulpCmd = process.platform === "win32" ? "gulp.cmd" : "gulp";
-    var searchPaths = [["node_modules", "@unumux", "ux-build-tools", "node_modules", ".bin", gulpCmd], ["node_modules", ".bin", gulpCmd]];
+    var searchPaths = [["node_modules", "@unumux", "ux-build-tools", "node_modules", ".bin", gulpCmd], ["node_modules", ".bin", gulpCmd], ["node_modules", "@unumux", "ui-framework", "node_modules", ".bin", gulpCmd]];
 
     searchPaths.forEach(function (searchPathTmp) {
         var searchPath = searchPathTmp.join(path.sep);
