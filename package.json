@@ -1,6 +1,6 @@
 {
   "name": "@unumux/ux-cli",
-  "version": "2.13.2",
+  "version": "2.13.3",
   "description": "",
   "repository": "https://github.com/unumux/ux-cli",
   "main": "dist/index.js",

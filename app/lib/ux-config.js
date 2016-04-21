@@ -71,7 +71,7 @@ export function detectIfSitecoreSite(dir) {
     var pathParts = dir.split(path.sep);
 
     // check if sitecore site
-    if(pathParts.indexOf("AllSites") >= 0 && pathParts.indexOf("SiteCore") >= 0 && pathParts.indexOf("UI") >= 0) {
+    if(pathParts.indexOf("AllSites") >= 0 && pathParts.indexOf("UI") >= 0) {
         // this is a Sitecore site
         return true;
     }
