@@ -1,7 +1,7 @@
 $tmp = $env:TEMP
 
-$nodeUrl = "https://nodejs.org/dist/v4.4.2/node-v4.4.2-x64.msi"
-$gitUrl = "https://github.com/git-for-windows/git/releases/download/v2.8.1.windows.1/Git-2.8.1-32-bit.exe"
+$nodeUrl = "https://nodejs.org/dist/v6.6.0/node-v6.6.0-x64.msi"
+$gitUrl = "https://github.com/git-for-windows/git/releases/download/v2.10.0.windows.1/Git-2.10.0-32-bit.exe"
 
 Function Reload-Path {
   $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine")
