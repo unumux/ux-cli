@@ -1,6 +1,6 @@
 {
   "name": "@unumux/ux-cli",
-  "version": "2.13.4",
+  "version": "2.14.0",
   "description": "",
   "repository": "https://github.com/unumux/ux-cli",
   "main": "dist/index.js",
@@ -22,6 +22,7 @@
     "babel-preset-stage-1": "^6.3.13",
     "babel-register": "^6.4.3",
     "chokidar": "^1.4.2",
+    "command-exists": "^1.2.2",
     "fs-extra": "^0.26.5",
     "glob": "^6.0.4",
     "inquirer": "^0.11.4",

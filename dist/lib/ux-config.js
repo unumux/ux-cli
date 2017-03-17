@@ -16,7 +16,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
  */
 
 var findPaths = exports.findPaths = function () {
-    var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(dir) {
+    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(dir) {
         var ignorePaths;
         return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
@@ -38,7 +38,7 @@ var findPaths = exports.findPaths = function () {
     }));
 
     return function findPaths(_x5) {
-        return ref.apply(this, arguments);
+        return _ref.apply(this, arguments);
     };
 }();
 

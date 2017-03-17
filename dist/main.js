@@ -22,7 +22,7 @@ var fs = require("fs"),
     argv = require("minimist")(process.argv.slice(2));
 
 module.exports = function () {
-    var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
         var pkg, ONE_HOUR, notifier, reconfigure, newInstall, buildTools;
         return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
@@ -122,35 +122,52 @@ module.exports = function () {
 
                     case 22:
                         if (!(argv.packages !== false)) {
-                            _context.next = 29;
+                            _context.next = 36;
                             break;
                         }
 
                         if (!(argv.npm !== false)) {
-                            _context.next = 26;
+                            _context.next = 33;
                             break;
                         }
 
                         _context.next = 26;
-                        return util.npmInstall();
+                        return util.yarnIsInstalled();
 
                     case 26:
-                        if (!(argv.bower !== false)) {
-                            _context.next = 29;
+                        if (!_context.sent) {
+                            _context.next = 31;
                             break;
                         }
 
                         _context.next = 29;
-                        return util.bowerInstall();
+                        return util.yarnInstall();
 
                     case 29:
+                        _context.next = 33;
+                        break;
+
+                    case 31:
+                        _context.next = 33;
+                        return util.npmInstall();
+
+                    case 33:
+                        if (!(argv.bower !== false)) {
+                            _context.next = 36;
+                            break;
+                        }
+
+                        _context.next = 36;
+                        return util.bowerInstall();
+
+                    case 36:
 
                         console.log("Starting UX...");
 
-                        _context.next = 32;
+                        _context.next = 39;
                         return util.determineBuildTools();
 
-                    case 32:
+                    case 39:
                         buildTools = _context.sent;
 
 
@@ -161,26 +178,26 @@ module.exports = function () {
                             util.runGulp(buildTools, argv._);
                         }
 
-                        _context.next = 40;
+                        _context.next = 47;
                         break;
 
-                    case 36:
-                        _context.prev = 36;
+                    case 43:
+                        _context.prev = 43;
                         _context.t0 = _context["catch"](0);
 
                         console.error("There was an unexpected error. Details: ");
                         console.error(_context.t0);
 
-                    case 40:
+                    case 47:
                     case "end":
                         return _context.stop();
                 }
             }
-        }, _callee, this, [[0, 36]]);
+        }, _callee, this, [[0, 43]]);
     }));
 
     function main() {
-        return ref.apply(this, arguments);
+        return _ref.apply(this, arguments);
     }
 
     return main;

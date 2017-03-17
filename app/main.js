@@ -79,9 +79,13 @@ module.exports = async function main() {
 
         // install packages if switches to override are not set
         if(argv.packages !== false) {
-
+            
             if(argv.npm !== false) {
-                await util.npmInstall();
+                if(await util.yarnIsInstalled()) {
+                    await util.yarnInstall();
+                } else {
+                    await util.npmInstall();
+                }
             }
 
             if(argv.bower !== false) {

@@ -8,7 +8,8 @@ var exec = require("child_process").exec,
     packageJson = require("package-json"),
     semver = require("semver"),
     ux = require("@unumux/lib-ux"),
-    chokidar = require("chokidar");
+    chokidar = require("chokidar"),
+    commandExists = require("command-exists");
 
 
 import * as UXConfig from "./ux-config.js";
@@ -79,6 +80,22 @@ export async function npmInstall() {
     if (await ux.shouldInstallNPMPackages()) {
         console.log("Installing NPM packages...");
         return execCmd("npm install");
+    }
+}
+
+export async function yarnIsInstalled() {
+    try {
+        await commandExists("yarn");
+        return true;
+    } catch(e) {
+        return false;
+    }
+}
+
+export async function yarnInstall() {
+    if (await ux.shouldInstallNPMPackages()) {
+        console.log("Installing NPM packages with Yarn...");
+        return execCmd("yarn install");
     }
 }
 
